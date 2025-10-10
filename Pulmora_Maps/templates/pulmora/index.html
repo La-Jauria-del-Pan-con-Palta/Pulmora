@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulmora</title>
-    <link rel="shortcut icon" href="/static/img/pulmora.ico" type="image/x-icon"> <!--The logo of pulmora-->
+    <link rel="shortcut icon" href="../../../static/img/icon.ico" type="image/x-icon"><!--The logo of pulmora-->
     <link rel="stylesheet" href="static/css/styles.css"> <!--call the .css archive-->
 </head>
 
@@ -13,14 +13,14 @@
     <header class="header">
         <div class="container"> 
             <div class="logo">
-                <img src="static/img/logo.png" alt="Pulmora Logo" class="logo-img">
+                <a href="{% url 'index' %}"><img src="../../../static/img/logo.png" alt="Pulmora Logo" class="logo-img" ></a>
             </div>
             <nav class="nav">
-                <a href="#comunidad">Comunidad</a>
+                <a href="{% url 'community' %}">Comunidad</a>
                 <a href="#datos">Datos</a>
                 <a href="#educacion">Educación</a>
             </nav>
-            <div class="header-buttons">
+            <div class="header-buttons" id="auth-buttoms">
                 <a href="{% url 'register' %}"><button class="btn-register">Registrarse</button></a>
                 <a href="{% url 'login' %}"><button class="btn-login">Iniciar sesion</button></a>
             </div>
@@ -39,7 +39,7 @@
                     </p>
                     <div class="hero-buttons">
                         <button class="btn-explore">Explora los datos</button>
-                        <button class="btn-community">Únete a la Comunidad</button>
+                        <a href="{% url 'community' %}"><button class="btn-community">Únete a la Comunidad</button></a>
                     </div>
                 </div>
                 <div class="hero-image">

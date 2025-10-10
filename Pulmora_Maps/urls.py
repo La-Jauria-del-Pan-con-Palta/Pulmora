@@ -9,5 +9,5 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name='pulmora/login.html'), name='login'),
     path("account/", views.account, name="account"),
     path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
-    path('comunity/', views.community, name="comunity")
+    path('community/', views.community, name="community")
 ]

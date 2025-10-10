@@ -1,13 +1,11 @@
-# Pulmora Update v-1.0
+# Pulmora Update v-1.5
 
 > [!NOTE]
->Implemente principalmente el index o la pagina principal de pulmora, con referencia con el diseño que nos dejo felipe, pero como no esta con css se ve mal. <br>
->Deje de manera muy basica los archivos como login o register, para luego los decoremos y dejemos bonito. <br>
->Al mismo tiempo ya luego podriamos tener listo las interfaces de usuario para iniciar a crear a implementar las APIs y por los tanto tambien las tablas para las bases de datos
+>Deje implementado los formularios por completo, y por lo tanto los datos de inicio de sesión, o registro ya se guardan en la base de datos, la cual es el archivo "db.sqlite3", En una proxima update voy a implementar ya porfin la continución del mapa, pero los más probable es que termine los archivos html inicialmente para luego centrarme solamente en los scripts
 
 >![IMPORTANT]
 >Si quieren debuggear el programa, deben utilizar el comando "python manage.py runserver", si ocupan del debugger de VS Code, no les funcionara correctaamente
->Este sera mi único commit que suba en la main branch, los proximo cambios más especificos lo subire en mi propia rama que llamare Pulmora/scripts
+>Aun no inicio con los scripts importantes, por lo tanto no he cambiado a mi propia branch
 
 >![WARNING]
 >Si quieren cambiar algo que no les parece de estos archivos, suban dicho commit en sus ramas personales, para evitar cualquier tipo de incopatibilidad con lo que se mantenga

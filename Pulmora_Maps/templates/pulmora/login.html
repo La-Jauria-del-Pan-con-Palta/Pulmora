@@ -3,26 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/static/img/pulmora.ico" type="image/x-icon"> 
-    <link rel="stylesheet" href="static/css/styles.css">
-    <title>Inicio de sesion</title>
+    <link rel="shortcut icon" href="../../../static/img/icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../static/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Inicio de sesión</title>
 </head>
 
-<!--A basic login with django-->
 <body>
-    <h1>Inicio de Sesion</h1>
-    <form method="post" action="{$url 'login' %}">
-        {% csrf_token %} <label for="id_username">Nombre de Usuario</label>
-        <input type="text" id="id_username" name="username" required> 
-        
-        <br>
-
-        <label for="id_password">Contraseña</label>
-        <input type="password" id="id_password" name="password" required>
-
-        <br>
-
-        <button type="submit">Iniciar sesión</button>
-    </form>
+    <header class="header">
+        <div class="container"> 
+            <div class="logo">
+                <a href="{% url 'index' %}"><img src="../../../static/img/logo.png" alt="Pulmora Logo" class="logo-img" ></a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'community' %}">Comunidad</a>
+                <a href="#datos">Datos</a>
+                <a href="#educacion">Educación</a>
+            </nav>
+        </div>
+    </header>
+    <!--The principal form, use the Django metrics to save the user data in the db-->
+    <div class="formulario">
+        <h1>Inicio de Sesión</h1>
+        <!--<img src="../../../static/img/hojita.png">-->
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" id="id_username" name="username" required>
+                <label for="id_username">Nombre de Usuario</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="id_password" name="password" required>
+                <label for="id_password">Contraseña</label>
+                <i class="fa-solid fa-eye" id="togglePassword"></i>
+            </div>
+            <div class="recordar">¿Olvidaste tu contraseña?</div>
+            <input type="submit" value="Iniciar sesión">
+            <div class="registrarse">¿No tienes cuenta? <a href="{% url 'register' %}">Registrate</a></div>
+        </form>
+    </div>    
+    <!--Call the principal script, only to watch the password-->
+    <script src="../../../static/js/watch-password.js"></script>
 </body>
 </html>
