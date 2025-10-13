@@ -1,32 +1,20 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulmora</title>
-    <link rel="shortcut icon" href="../../../static/img/icon.ico" type="image/x-icon"><!--The logo of pulmora-->
-    <link rel="stylesheet" href="static/css/styles.css"> <!--call the .css archive-->
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon"><!--The logo of pulmora-->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!--call the .css archive-->
 </head>
 
 <!--this are all the things that are buttons, icon, etc-->
 <body>
-    <header class="header">
-        <div class="container"> 
-            <div class="logo">
-                <a href="{% url 'index' %}"><img src="../../../static/img/logo.png" alt="Pulmora Logo" class="logo-img" ></a>
-            </div>
-            <nav class="nav">
-                <a href="{% url 'community' %}">Comunidad</a>
-                <a href="#datos">Datos</a>
-                <a href="#educacion">Educación</a>
-            </nav>
-            <div class="header-buttons" id="auth-buttoms">
-                <a href="{% url 'register' %}"><button class="btn-register">Registrarse</button></a>
-                <a href="{% url 'login' %}"><button class="btn-login">Iniciar sesion</button></a>
-            </div>
-        </div>
-    </header>
-
+    
+    {% include 'pulmora/partials/header.html' %}
+    
     <!--the principal section, the first thing the user sees-->
     <section class="hero">
         <div class="container">
@@ -44,7 +32,7 @@
                 </div>
                 <div class="hero-image">
                     <div class="earth">
-                        <img src="static/img/earth.png" alt="Planeta Tierra" class="earth-img">
+                        <img src="{% static 'img/earth.png' %}" alt="Planeta Tierra" class="earth-img">
                     </div>
                 </div>
             </div>

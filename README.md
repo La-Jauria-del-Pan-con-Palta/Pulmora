@@ -1,7 +1,7 @@
-# Pulmora Update v-1.5
+# Pulmora Update v-2.0
 
 > [!NOTE]
->Deje implementado los formularios por completo, y por lo tanto los datos de inicio de sesión, o registro ya se guardan en la base de datos, la cual es el archivo "db.sqlite3", En una proxima update voy a implementar ya porfin la continución del mapa, pero los más probable es que termine los archivos html inicialmente para luego centrarme solamente en los scripts
+>Cambios en el header, creando uno dinamico que funncionara en cualquier pagina nueva creada que necesite un link, al mismo tiempo esta implementada la base de datos y los diseños en css, ya funciona e implementada, además de que el login tiene botones funcionales y en caso de tener cuenta aparece el boton provicional de cuenta junto a un saludo hacia el usuario. Tambien se cambiaron las rutas relativas por url de archivos los cuales funcionan mejor par django como una mejor alternativa para ellas.
 
 >[!IMPORTANT]
 >Si quieren debuggear el programa, deben utilizar el comando "python manage.py runserver", si ocupan del debugger de VS Code, no les funcionara correctaamente

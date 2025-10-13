@@ -1,10 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../../../static/img/icon.ico" type="image/x-icon"> 
-    <link rel="stylesheet" href="../../../static/css/register.css">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon"> 
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>Crea una cuenta</title>
 </head>
@@ -12,7 +14,7 @@
     <header class="header">
         <div class="container"> 
             <div class="logo">
-                <a href="{% url 'index' %}"><img src="../../../static/img/logo.png" alt="Pulmora Logo" class="logo-img" ></a>
+                <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Pulmora Logo" class="logo-img" ></a>
             </div>
             <nav class="nav">
                 <a href="{% url 'community' %}">Comunidad</a>
@@ -25,34 +27,63 @@
     <div class="formulario">
         <h1>Crea una cuenta</h1>
         <!--<img src="../../../static/img/hojita.png">-->
-        <form method="post" action="{ % url 'register' %}">
+        <form method="post" action="{% url 'register' %}">
             {% csrf_token %} 
             <div class="input-group">
-                <input type="text" id="id_username" name="username" required> 
+                <input type="text" id="id_username" name="username" required value="{% if form.username.value %}{{ form.username.value }}{% endif %}">
                 <label for="id_username">Nombre de Usuario</label>
             </div>
+            {% if form.username.errors %}
+                <div class="error-container">
+                    {% for error in form.username.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="input-group">
-                <input type="email" id="id_email" name="email" required>
-                <label for="email">Correo electronico</label>
+                <input type="email" id="id_email" name="email" required value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
+                <label for="id_email">Correo electronico</label>
             </div>
+            {% if form.email.errors %}
+                <div class="error-container">
+                    {% for error in form.email.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="input-group">
-                <input type="password" id="id_password" name="password" required>
-                <label for="id_password">Contraseña</label>
-                <i class="fa-solid fa-eye" id="togglePassword"></i>
+                <input type="password" id="id_password1" name="password1" required>
+                <label for="id_password1">Contraseña</label>
+                <i class="fa-solid fa-eye" id="togglePassword1"></i>
             </div>
+            {% if form.password.errors %}
+                <div class="error-container">
+                    {% for error in form.password.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="input-group">
                 <input type="password" id="id_password2" name="password2" required>
-                <label for="id_password">Confirmar contraseña</label>
-                <i class="fa-solid fa-eye" id="togglePassword"></i>
+                <label for="id_password2">Confirmar contraseña</label>
+                <i class="fa-solid fa-eye" id="togglePassword2"></i>
             </div>
-
-            <!--This is the error manager-->
-            {% if form.errors %}
+            {% if form.password2.errors %}
                 <div class="error-container">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errrors %}
-                            <p class="error-message">{{ error }}</p>
-                        {% endfor %}
+                    {% for error in form.password2.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- This is for non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="error-container">
+                    {% for error in form.non_field_errors %}
+                        <p class="error-message">{{ error }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -61,6 +92,6 @@
             <div class="login">¿Ya tienes una cuenta?<a href="{% url 'login' %}"> Iniciar Sesión</a></div>
         </form>
     </div>
-    <script src="../../../static/js/watch-password.js"></script>
+    <script src="{% static 'js/watch-password.js' %}"></script>
 </body>
 </html>

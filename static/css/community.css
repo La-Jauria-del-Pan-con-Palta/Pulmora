@@ -1,0 +1,92 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #ffffff;
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e7eb;
+    width: 100%;
+}
+
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-img {
+    height: 40px;
+}
+
+
+.nav {
+    display: flex;
+    gap: 25px;
+}
+
+.nav a {
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    color: #059669;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-greeting {
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #059669;
+    color: white;
+    border-color: #059669;
+}
+
+.btn-primary:hover {
+    background-color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.btn-secondary {
+    background-color: #0f172a;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+}

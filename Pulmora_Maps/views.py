@@ -13,10 +13,8 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            
             login(request, user)
-
-            return redirect('account') 
+            return redirect('account')
     else:
         form = CustomUserCreationForm()
     

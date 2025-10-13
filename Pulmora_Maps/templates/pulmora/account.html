@@ -1,10 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/static/img/pulmora.ico" type="image/x-icon">
-    <link rel="stylesheet" href="static/css/account.css">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
     <title>Mi cuenta</title>
 </head>
 <body>
@@ -18,11 +20,16 @@
                 <a href="#datos">Datos</a>
                 <a href="#educacion">Educación</a>
             </nav>
-            <div class="header-buttons" id="auth-buttoms">
-                <a href="{% url 'register' %}"><button class="btn-register">Registrarse</button></a>
-                <a href="{% url 'login' %}"><button class="btn-login">Iniciar sesion</button></a>
-            </div>
         </div>
     </header>
+    
+    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout">Cerrar sesión</button>
+    </form>
 </body>
 </html>
+
+<!--Datos del usuario de prueba-->
+<!--Tatsuohi-->
+<!--Z96Zb6JZWrubWSu-->
