@@ -358,3 +358,51 @@ body {
     display: flex;
     align-items: center;
 }
+
+.breadcrumb-nav {
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 0;
+}
+
+.breadcrumb-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.breadcrumb-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.breadcrumb-item a {
+    color: #059669;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb-item a:hover {
+    color: #047857;
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    margin: 0 8px;
+    color: #9ca3af;
+    font-size: 14px;
+}

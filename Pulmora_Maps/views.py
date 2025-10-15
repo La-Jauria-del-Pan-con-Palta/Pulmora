@@ -26,6 +26,49 @@ def register(request):
 def account(request):
     return render(request, 'pulmora/account.html')
 
-# Render the community page
+# Render the difference pages useful with a bredcrumb in all of there
 def community(request):
+    context = {
+        'breadcrumb': [
+            {
+                'name': 'inicio', 
+                'url': 'index'
+             },
+            {
+                'name': 'comunidad',
+                'url': None
+            }
+        ]
+    }
     return render(request, 'pulmora/community.html')
+
+
+def data(request):
+    context = {
+        'breadcrumb': [
+            {
+                'name': 'inicio', 
+                'url': 'index'
+             },
+            {
+                'name': 'datos',
+                'url': None
+            }
+        ]
+    }
+    return render(request, 'pulmora/data.html')
+
+def education(request):
+    context = {
+        'breadcrumb': [
+            {
+                'name': 'inicio', 
+                'url': 'index'
+             },
+            {
+                'name': 'educación',
+                'url': None
+            }
+        ]
+    }
+    return render(request, 'pulmora/education.html')

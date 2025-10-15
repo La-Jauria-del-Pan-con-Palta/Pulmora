@@ -1,7 +1,7 @@
-# Pulmora Update v-2.0
+# Pulmora Update v-2.1 /forums/
 
 > [!NOTE]
->Cambios en el header, creando uno dinamico que funncionara en cualquier pagina nueva creada que necesite un link, al mismo tiempo esta implementada la base de datos y los diseños en css, ya funciona e implementada, además de que el login tiene botones funcionales y en caso de tener cuenta aparece el boton provicional de cuenta junto a un saludo hacia el usuario. Tambien se cambiaron las rutas relativas por url de archivos los cuales funcionan mejor par django como una mejor alternativa para ellas.
+>Esta es una de mis nuevas branchs personales, en las cuales trabajare unicamente en la creación de los foros, lo dejo aparte de la main, debido a que debo e trabajar tanto con la base de datos como con scripts, urls y settings el proyecto, para así no romper nada de lo ya avanzado y tener un mejor control de versiones. el tema del breadcrumb al ser meramente estetico queda en stand by por el momento, y luego lo continuare al tener bien implementado estas nuevas versiones y por lo tanto tambien gran parte del proyecto
 
 >[!IMPORTANT]
 >Si quieren debuggear el programa, deben utilizar el comando "python manage.py runserver", si ocupan del debugger de VS Code, no les funcionara correctaamente

@@ -11,5 +11,42 @@
 </head>
 <body>
     {% include 'pulmora/partials/header.html' %}
+    
+    {% include 'pulmora/partials/breadcrumb.html' %}
+
+    <main>
+        {% if user.is_authenticated %}
+            <section id="new-post">
+                <h2>Crea una nueva publicación</h2>
+                <form id="new-post-form">
+                    <input type="text" id="post-title" placeholder="Titulo" required>
+                    <textarea id="post-content" placeholder="Comparte tus pensamientos" rows="5" required></textarea>
+                    <button type="submit">Publicar</button>
+                </form>
+            </section>
+        {% else %}
+            <section id="register-text">
+                <div class="register-needed-text">
+                    <h1>¿Quieres publicar un post?</h1>
+                    <p>Regitrate o inicia sesión para que puedas hacer publicaciones en los foros</p>
+                    <a href="{% url 'register' %}"><button class="btn btn-secondary">Regitrate</button></a>
+                    <a href="{% url 'login' %}"><button class="btn btn-primary">Inicia sesión</button></a>
+                </div>
+
+            </section>
+        {% endif %}
+            
+        <section id="post-list">
+            <h2>Ultimas publicaciones</h2>
+            <div id="post-container">
+                <article class="post-card">
+                    <div class="post-votes">
+                        <button class="vote-up">👍</button>
+                        <button class="vote-down">👎</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

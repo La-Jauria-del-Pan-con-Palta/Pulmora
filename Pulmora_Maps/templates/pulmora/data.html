@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/data.css' %}">
+    <title>Datos</title>
+</head>
+<body>
+    {% include 'pulmora/partials/header.html' %}
+
+    {% include 'pulmora/partials/breadcrumb.html' %}
+</body>
+</html>
