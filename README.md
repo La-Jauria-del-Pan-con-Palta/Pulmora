@@ -1,7 +1,7 @@
-# Pulmora Update v-2.1 /forums/
+# Pulmora Update v-2.1.1 /scripts/
 
 > [!NOTE]
->Esta es una de mis nuevas branchs personales, en las cuales trabajare unicamente en la creación de los foros, lo dejo aparte de la main, debido a que debo e trabajar tanto con la base de datos como con scripts, urls y settings el proyecto, para así no romper nada de lo ya avanzado y tener un mejor control de versiones. el tema del breadcrumb al ser meramente estetico queda en stand by por el momento, y luego lo continuare al tener bien implementado estas nuevas versiones y por lo tanto tambien gran parte del proyecto
+>Ya que la profesora me recomendo de ya implementar las APIs, inicie con eso, y por lo tanto ya inicie con los pequeños cambios con la creación de los llamados a las APIs, al mismo tiempo cambie los 2 errores que tenia que hacia que no me funcionara el breadcrumb y ahora es totalmente funcional como una forma beta, el cual solamente lleva al index y te dice en que pagina estas actualmente, pero luego dejare eso para que lleve entre las diferentes paginas en caso de presionar más de una. Actualmente solo me concentrare en las views y ya el funcionameinto correcto de todo lo que necesite APIs, osea el mapa interactivo, y por lo tanto también el chatbox.
 
 >[!IMPORTANT]
 >Si quieren debuggear el programa, deben utilizar el comando "python manage.py runserver", si ocupan del debugger de VS Code, no les funcionara correctaamente

@@ -40,7 +40,7 @@ def community(request):
             }
         ]
     }
-    return render(request, 'pulmora/community.html')
+    return render(request, 'pulmora/community.html', context)
 
 
 def data(request):
@@ -56,7 +56,7 @@ def data(request):
             }
         ]
     }
-    return render(request, 'pulmora/data.html')
+    return render(request, 'pulmora/data.html', context)
 
 def education(request):
     context = {
@@ -71,4 +71,4 @@ def education(request):
             }
         ]
     }
-    return render(request, 'pulmora/education.html')
+    return render(request, 'pulmora/education.html', context)

@@ -6,7 +6,7 @@
             {% for item in breadcrumb %}
                 {% if item.url %}
                     <li class="breadcrumb-item">
-                        <a href="{% url 'item.url' %}">{{ item.name }}</a>
+                        <a href="{% url item.url %}">{{ item.name }}</a>
                     </li>
                     {% if not forloop.last %}
                         <li class="breadcrumb-separator">></li>

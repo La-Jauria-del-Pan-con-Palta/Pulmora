@@ -15,6 +15,18 @@
     {% include 'pulmora/partials/breadcrumb.html' %}
 
     <main>
+        <section id="post-list">
+            <h2>Ultimas publicaciones</h2>
+            <div id="post-container">
+                <article class="post-card">
+                    <div class="post-votes">
+                        <button class="vote-up">👍</button>
+                        <button class="vote-down">👎</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
         {% if user.is_authenticated %}
             <section id="new-post">
                 <h2>Crea una nueva publicación</h2>
@@ -36,17 +48,6 @@
             </section>
         {% endif %}
             
-        <section id="post-list">
-            <h2>Ultimas publicaciones</h2>
-            <div id="post-container">
-                <article class="post-card">
-                    <div class="post-votes">
-                        <button class="vote-up">👍</button>
-                        <button class="vote-down">👎</button>
-                    </div>
-                </article>
-            </div>
-        </section>
     </main>
 </body>
 </html>
