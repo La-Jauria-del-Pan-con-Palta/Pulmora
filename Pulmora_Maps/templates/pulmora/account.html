@@ -10,23 +10,22 @@
     <title>Mi cuenta</title>
 </head>
 <body>
-    <header class="header">
-        <div class="container"> 
-            <div class="logo">
-                <a href="{% url 'index' %}"><img src="../../../static/img/logo.png" alt="Pulmora Logo" class="logo-img" ></a>
-            </div>
-            <nav class="nav">
-                <a href="{% url 'community' %}">Comunidad</a>
-                <a href="#datos">Datos</a>
-                <a href="#educacion">Educación</a>
-            </nav>
+    {% include 'pulmora/partials/header.html' %}
+    <div class="main-container">
+        
+        <div class="construccion">
+            <h2>Disculpen, pagina aún en construcción</h2>
+            <p class="subtitle">Tengan esta bocchi girando por mientras</p>
+            <a href="https://www.tiktok.com/@anya_y_bocchi1/video/7557473049725963531?q=bocchi%20bailando&t=1761284114106"><img src="{% static 'img/bocchi-spin.gif' %}"></a>
         </div>
-    </header>
-    
-    <form action="{% url 'logout' %}" method="post" style="display: inline;">
-        {% csrf_token %}
-        <button type="submit" class="logout">Cerrar sesión</button>
-    </form>
+
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout">Cerrar sesión</button>
+        </form>
+
+    </div>
+
 </body>
 </html>
 

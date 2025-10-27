@@ -14,14 +14,20 @@ def air_quality(lat, lon):
         response = response.get(url)
         response.raise_for_status()
         data = response.json
-        return data['list'][0]['main']['aqi']
+        if data.get('list'):
+            air_data = data['list'][0]
+            return {
+                'aqi': air_data['main']['aqi'],
+                'components': air_data['components']
+            }
+        return None
     except requests.exceptions.RequestException as e:
         print(f"Error al llamar a la API de OpenWeather: {e}")
         return None
     
-#The first of many API requests to do in Climatiq / I'm gonna find a better and easly way
-def co2_emmissions(country_code='US'):
-    api_key = os.environ.get('13N7CRNB551EV1S3RN0K2BHKY0')
+#The first of many API requests to do in Climatiq / improved
+def co2_emmissions(country_code: str, year: int = 2024):
+    api_key = os.environ.get('CLIMATIQ_API_KEY')
     if not api_key:
         print('Error: No se encuentra la API de Climatiq')
 
@@ -32,10 +38,11 @@ def co2_emmissions(country_code='US'):
         "emissions_factor": {
             "activity_id": "financial_spend-scope_3_cat_15_per_capita_co2e",
             "region": country_code,
-            "year": 2025,
+            "year": year,
             "source": "EXIOBASE",
             "data_version": "^3"
         },
+    #It's only needed to call the API, the essentials are already done
     "parameters": {
         "money": 1,
         "money_unit": "usd"
@@ -47,10 +54,14 @@ def co2_emmissions(country_code='US'):
         response.raise_for_status()
         data = response.json()
         return data.get('co2e')
+    except requests.exceptions.HTTPError as e:
+        print(f'Error HTTP para {country_code}: {e.response.status_code} - {e.response.text}')
+        return None
     except requests.exceptions.RequestException as e:
         print(f'Error al llamar a la API de Climatiq: {e}')
+        return None
 
-def chatbox(promt):
+"""def chatbox(promt):
     api_key = os.environ.get('GEMINI_API_KEY')
     if not api_key:
         print('Error: No se encuentra la API de Gemini')
@@ -63,4 +74,4 @@ def chatbox(promt):
         return response.text
     except Exception as e:
         print(f"Error al llamar a la API de Gemini: {e}")
-        return None
+        return None"""

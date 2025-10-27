@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from . import apis
 
 # Principal function, only render the main page
 def index(request):
@@ -44,7 +45,27 @@ def community(request):
 
 
 def data(request):
+    countries= [
+        #template of all countries {'name': '', 'code': '', 'lat': '', 'lon': ''}
+        {'name': 'Chile', 'code': 'CL', 'lat': '-35.675147', 'lon': '-71.542969'}
+    ]
+    
+    data = []
+    for country in countries:
+        aqi = apis.air_quality(country['lat'], country['lon'])
+        co2 = apis.co2_emmissions(country['code'])
+
+        data.append({
+            'name': country['name'],
+            'lat': country['lat'],
+            'lon': country['lon'],
+            'aqi': aqi,
+            'co2': co2
+        })
+
     context = {
+        'data_maps': data,
+
         'breadcrumb': [
             {
                 'name': 'inicio', 

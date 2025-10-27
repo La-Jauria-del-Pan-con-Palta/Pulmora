@@ -11,18 +11,9 @@
     <title>Crea una cuenta</title>
 </head>
 <body>
-    <header class="header">
-        <div class="container"> 
-            <div class="logo">
-                <a href="{% url 'index' %}"><img src="{% static 'img/logo.png' %}" alt="Pulmora Logo" class="logo-img" ></a>
-            </div>
-            <nav class="nav">
-                <a href="{% url 'community' %}">Comunidad</a>
-                <a href="#datos">Datos</a>
-                <a href="#educacion">Educación</a>
-            </nav>
-        </div>
-    </header>
+    
+     {% include 'pulmora/partials/header.html' %}
+
     <!--A better register form, with error manager-->
     <div class="formulario">
         <h1>Crea una cuenta</h1>

@@ -6,16 +6,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{% static 'css/data.css' %}">
-    <title>Datos</title>
+    <title>Datos - Mapa Interactivo</title>
 </head>
 <body>
-    {% include 'pulmora/partials/header.html' %}
 
+    {% include 'pulmora/partials/header.html' %}
+    
     {% include 'pulmora/partials/breadcrumb.html' %}
 
-    <main>
+    <main class="data-container">
         
+        <div class="dashboard-wrapper">
+            <div class="main-title">
+                <h1>Datos por Paises 🌎</h1>
+            </div>
+            <div class="map-section">
+                <div id="interactive-map"></div>
+                <div class="map-legend">
+                    <h4>Emisiones de Co2 per capíta</h4>
+                    <ul>
+                        <li><span class="color-box" style="background-color: #d9534f;"></span> Alto (>10t )</li>
+                        <li><span class="color-box" style="background-color: #f0ad4e;"></span> Medio (5-10t)</li>
+                        <li><span class="color-box" style="background-color: #5cb85c;"></span> Bajo (2-5t)</li>
+                        <li><span class="color-box" style="background-color: #a4d6a4;"></span> Muy bajo (<2t)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="kpi-cards-container">
+                <div class="card" id="card-co2-per-capita">
+                    <img src="{% static 'img/users.png' %}" alt="Huella per cápita">
+                    <h3 id="kpi-value-co2">-- t</h3>
+                    <p>Huella per cápita (CO₂e)</p>
+                </div>
+                <div class="card" id="card-aqi">
+                    <img src="{% static 'img/metrics.png' %}" alt="Calidad del Aire">
+                    <h3 id="kpi-value-aqi">--</h3>
+                    <p>Índice Calidad del Aire</p>
+                </div>
+                <div class="card" id="card-aqi-level">
+                    <img src="{% static 'img/co2.svg' %}" alt="Nivel de Calidad">
+                    <h3 id="kpi-value-aqi-level">Selecciona un país</h3>
+                    <p>Nivel Calidad del Aire</p>
+                </div>
+                <div class="card" id="card-main-pollutant">
+                    <img src="{% static 'img/target.png' %}" alt="Contaminante principal">
+                    <h3 id="kpi-value-main-pollutant">--</h3>
+                    <p>Contaminante principal</p>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h4>Emisiones por Continente</h4>
+                    <canvas id="emissions-by-continent-chart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h4>Principales Sectores Emisores</h4>
+                    <canvas id="emissions-by-sector-chart"></canvas>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/data.js' %}"></script>
 </body>
 </html>

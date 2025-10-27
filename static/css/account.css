@@ -135,3 +135,32 @@ body {
     display: flex;
     align-items: center;
 }
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px); 
+    padding: 20px;
+}
+
+.construccion {
+    text-align: center;
+}
+
+.construccion h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.construccion .subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+}
+.construccion img {
+    margin-top: 25px;
+    max-width: 400px;
+}
