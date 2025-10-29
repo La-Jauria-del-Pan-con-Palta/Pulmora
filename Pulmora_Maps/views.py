@@ -3,6 +3,8 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from . import apis
+from .models import Post
+from django.db.models import Count
 
 # Principal function, only render the main page
 def index(request):
@@ -29,6 +31,18 @@ def account(request):
 
 # Render the difference pages useful with a bredcrumb in all of there
 def community(request):
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            title = request.POST.get('post-title')
+            content = request.POST.get('post-content')
+        
+        if title and content:
+            Post.objects.create(author=request.user, title=title, content=content)
+            return redirect('community')
+        
+    success_stories = Post.objects.all().order_by('-created_at')[:3]
+    popular_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-num_likes', '-created_at')
+
     context = {
         'breadcrumb': [
             {
@@ -39,7 +53,10 @@ def community(request):
                 'name': 'comunidad',
                 'url': None
             }
-        ]
+        ],
+
+        'success_stories': success_stories,
+        'popular_stories': popular_stories
     }
     return render(request, 'pulmora/community.html', context)
 

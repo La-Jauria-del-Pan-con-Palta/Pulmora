@@ -14,40 +14,58 @@
     
     {% include 'pulmora/partials/breadcrumb.html' %}
 
-    <main>
-        <section id="post-list">
-            <h2>Ultimas publicaciones</h2>
-            <div id="post-container">
-                <article class="post-card">
-                    <div class="post-votes">
-                        <button class="vote-up">👍</button>
-                        <button class="vote-down">👎</button>
+    <div class="community-container">
+        <header class="community-header">
+            <img src="{% static 'img/hojita.png' %}">
+            <h1>Comunidad Pulmora</h1>
+            <p>Unete a miles de persona que ya están tomando acción por el planeta. Comparte, aprende y crece junto a nuesta comunidad</p>
+        </header>
+       
+        <section class="succsess-stories">
+            <h2 class="section-title">💖Historias de Éxito</h2>
+            <div class="stories-grid">
+                {% for story in success_stories %}
+                    <div class="story-card">
+                        <div class="story-author">
+                            <div class="author-info">
+                                <span class="author-name">{{ story.author.get_full_name|default:story.author.username }}</span>
+                            </div>
+                        </div>
+                        <p class="story-quoute">"{{ story.content|truncatewords:40 }}"</p>
+                        <div class="story-stats">
+                            <span>{{ story.likes }} Me gusta</span>
+                            <span>{{ story.comments.count }} Comentarios</span>
+                        </div>
                     </div>
-                </article>
+                {% empty %}
+                <p class="empty-messsage">Aún no se han publicados historia. ¡Anímate a contar la tuya!</p>
+                {% endfor %}
             </div>
         </section>
-        
-        {% if user.is_authenticated %}
-            <section id="new-post">
-                <h2>Crea una nueva publicación</h2>
-                <form id="new-post-form">
-                    <input type="text" id="post-title" placeholder="Titulo" required>
-                    <textarea id="post-content" placeholder="Comparte tus pensamientos" rows="5" required></textarea>
-                    <button type="submit">Publicar</button>
-                </form>
-            </section>
-        {% else %}
-            <section id="register-text">
-                <div class="register-needed-text">
-                    <h1>¿Quieres publicar un post?</h1>
-                    <p>Regitrate o inicia sesión para que puedas hacer publicaciones en los foros</p>
-                    <a href="{% url 'register' %}"><button class="btn btn-secondary">Regitrate</button></a>
-                    <a href="{% url 'login' %}"><button class="btn btn-primary">Inicia sesión</button></a>
-                </div>
 
-            </section>
-        {% endif %}
-            
-    </main>
+
+        <section class="community-forum">
+            <div class="new-post-container">
+                {% if user.is_authenticated %}
+                    <h3>Únete a la conversación</h3>
+                    <form id="new-post-form" method="post" action="{% url 'community' %}">
+                        {% csrf_token %}
+                        <input type="text" id="post-title" name="post-title" placeholder="Titulo" required>
+                        <textarea id="post-content" name="post-content" placeholder="Comparte tu historia" rows="5" required></textarea>
+                        <button type="submit" class="btn-primary">Publicar</button>
+                    </form>
+                {% else %}
+                <div class="register-box">
+                    <h3>Únete a las conversaciones</h3>
+                    <p>Regístrate o inicia sesión para compartir tus historias, preguntas o ideas</p>
+                    <div class="auth-buttons">
+                        <a href="{% url 'register' %}" class="btn btn-secondary">Registrarse</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
 </body>
 </html>

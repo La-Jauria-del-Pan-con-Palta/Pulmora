@@ -191,3 +191,57 @@ input[type="submit"]:hover {
 .input-group i:hover {
     color: #059669;
 }
+
+.auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-greeting {
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #059669;
+    color: white;
+    border: 1px solid #059669;
+}
+
+.btn-primary:hover {
+    background-color: #047857;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+.btn-secondary {
+    background-color: #0f172a;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+}
