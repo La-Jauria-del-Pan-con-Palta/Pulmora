@@ -13,7 +13,7 @@ body {
 
 .community-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 30px auto;
     padding: 0 20px;
 }
 
@@ -34,12 +34,8 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
 }
 
 .community-header h1 {
@@ -57,7 +53,7 @@ body {
     line-height: 1.8;
 }
 
-.succsess-stories {
+.success-stories {
     margin-bottom: 80px;
 }
 
@@ -71,10 +67,55 @@ body {
     gap: 12px;
 }
 
-.stories-grid {
+.carousel-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stories-grid-js {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
+    width: 100%;
+    max-width: 1050px;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 40%;
+}
+
+.carousel-btn:hover {
+    background-color: #f0f8f5;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-btn.prev {
+    left: -22px;
+    background-image: url('/static/img/arrow1.png');
+}
+
+.carousel-btn.next {
+    right: -22px;
+    background-image: url('/static/img/arrow.png');
 }
 
 .story-card {
@@ -84,6 +125,8 @@ body {
     border-left: 5px solid #059669;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .story-card:hover {
@@ -108,7 +151,7 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 20px;
     flex-shrink: 0;
 }
 
@@ -116,23 +159,16 @@ body {
     font-size: 16px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 4px;
-}
-
-.story-location {
-    font-size: 13px;
-    color: #6b7280;
-    margin: 0;
 }
 
 .story-quoute {
     font-size: 14px;
     color: #4b5563;
-    line-height: 1.6;
     font-style: italic;
     margin-bottom: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid #e5e7eb;
+    flex-grow: 1; 
 }
 
 .story-stats {
@@ -143,125 +179,33 @@ body {
     font-weight: 600;
 }
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.empty-messsage {
+.empty-message {
     grid-column: 1 / -1;
     text-align: center;
     padding: 40px;
     color: #9ca3af;
     font-size: 16px;
+    width: 100%;
 }
 
 .community-forum {
     margin-bottom: 60px;
 }
 
-.forum-header {
-    margin-bottom: 32px;
-}
-
-.forum-title {
-    font-size: 28px;
-    font-weight: 600;
-    color: #1f2937;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.forum-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.forum-left h3,
-.forum-right h3 {
-    font-size: 18px;
+.new-post-container h3, .register-box h3 {
+    font-size: 22px;
     font-weight: 600;
     color: #1f2937;
     margin-bottom: 24px;
-}
-
-.discussions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.discussion-item {
-    display: flex;
-    gap: 16px;
-    padding: 16px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    color: #4b5563;
-    text-decoration: none;
-}
-
-.discussion-item:hover {
-    background-color: #f0f8f5;
-    transform: translateX(4px);
-}
-
-.discussion-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-    border: 1px solid;
-}
-
-.discussion-icon.green {
-    background-color: #ecfdf5;
-    color: #059669;
-    border-color: #059669;
-}
-
-.discussion-icon.blue {
-    background-color: #eff6ff;
-    color: #3b82f6;
-    border-color: #3b82f6;
-}
-
-.discussion-icon.orange {
-    background-color: #fff7ed;
-    color: #f97316;
-    border-color: #f97316;
-}
-
-.discussion-content h4 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 6px;
-}
-
-.discussion-meta {
-    font-size: 12px;
-    color: #6b7280;
-    margin: 0;
+    text-align: center;
 }
 
 #new-post-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 #new-post-form input[type="text"],
@@ -275,11 +219,6 @@ body {
     transition: all 0.3s ease;
 }
 
-#new-post-form input[type="text"]::placeholder,
-#new-post-form textarea::placeholder {
-    color: #9ca3af;
-}
-
 #new-post-form input[type="text"]:focus,
 #new-post-form textarea:focus {
     outline: none;
@@ -289,28 +228,32 @@ body {
 
 #new-post-form textarea {
     resize: vertical;
-    min-height: 140px;
+    min-height: 120px;
 }
+
 .register-box {
-    background-color: #05966811;
+    background-color: #f0f8f5;
+    padding: 40px;
+    border-radius: 12px;
     text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .register-box p {
     font-size: 14px;
     color: #6b7280;
     margin-bottom: 24px;
-    line-height: 1.6;
 }
 
 .auth-buttons {
     display: flex;
     gap: 12px;
     justify-content: center;
-    flex-wrap: wrap;
 }
 
-.btn-primary.btn-full {
+.btn-primary.btn-full,
+#new-post-form button.btn-primary {
     padding: 12px 32px;
     border-radius: 8px;
     font-size: 14px;
@@ -326,109 +269,31 @@ body {
     color: white;
 }
 
-.btn-primary.btn-full:hover {
+.btn-primary.btn-full:hover,
+#new-post-form button.btn-primary:hover {
     background-color: #047857;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
 }
 
-@media (max-width: 1024px) {
-    .forum-content {
-        grid-template-columns: 1fr;
-        gap: 24px;
+/* === Media Queries === */
+@media (max-width: 1100px) {
+    .stories-grid-js {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
     }
 }
 
 @media (max-width: 768px) {
-    .community-header {
-        padding: 40px 20px;
-    }
-
-    .community-header h1 {
-        font-size: 32px;
-    }
-
-    .community-header p {
-        font-size: 14px;
-    }
-
-    .section-title {
-        font-size: 24px;
-    }
-
-    .stories-grid {
+    .community-header { padding: 40px 20px; }
+    .community-header h1 { font-size: 32px; }
+    .section-title { font-size: 24px; }
+    .stories-grid-js {
         grid-template-columns: 1fr;
+        max-width: 350px;
     }
-
-    .forum-content {
-        padding: 24px;
-    }
-
-    .forum-left h3,
-    .forum-right h3 {
-        font-size: 16px;
-    }
-
-    .auth-buttons {
-        flex-direction: column;
-    }
-
-    .auth-buttons .btn-primary,
-    .auth-buttons .btn-secondary {
-        width: 100%;
-        padding: 10px 24px;
-    }
-}
-
-@media (max-width: 480px) {
-    .community-header {
-        padding: 30px 16px;
-        margin-bottom: 40px;
-    }
-
-    .community-header h1 {
-        font-size: 26px;
-    }
-
-    .community-header img {
-        width: 48px;
-        height: 48px;
-    }
-
-    .section-title {
-        font-size: 20px;
-    }
-
-    .story-card {
-        padding: 16px;
-    }
-
-    .forum-content {
-        padding: 16px;
-    }
-
-    #new-post-form input[type="text"],
-    #new-post-form textarea {
-        padding: 10px 12px;
-        font-size: 13px;
-    }
-
-    #new-post-form textarea {
-        min-height: 100px;
-    }
-
-    .discussion-item {
-        padding: 12px;
-    }
-
-    .discussion-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-    }
-
-    .discussion-content h4 {
-        font-size: 13px;
+    .carousel-btn {
+        display: none !important;
     }
 }
 
@@ -451,7 +316,6 @@ body {
 .logo-img {
     height: 40px;
 }
-
 
 .nav {
     display: flex;
@@ -564,4 +428,33 @@ body {
     margin: 0 8px;
     color: #9ca3af;
     font-size: 14px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 70px); 
+    padding: 20px;
+}
+
+.construccion {
+    text-align: center;
+}
+
+.construccion h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.construccion .subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+}
+.construccion img {
+    margin-top: 25px;
+    max-width: 400px;
 }

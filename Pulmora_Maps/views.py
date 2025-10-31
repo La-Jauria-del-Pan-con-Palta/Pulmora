@@ -17,7 +17,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('account')
+            return redirect('index')
     else:
         form = CustomUserCreationForm()
     
@@ -40,9 +40,12 @@ def community(request):
             Post.objects.create(author=request.user, title=title, content=content)
             return redirect('community')
         
-    success_stories = Post.objects.all().order_by('-created_at')[:3]
+    success_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-created_at')
     popular_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-num_likes', '-created_at')
 
+    VISIBLE_STORIES_LIMIT = 3
+
+    show_carousel = popular_stories.count() > VISIBLE_STORIES_LIMIT
     context = {
         'breadcrumb': [
             {
@@ -56,7 +59,8 @@ def community(request):
         ],
 
         'success_stories': success_stories,
-        'popular_stories': popular_stories
+        'popular_stories': popular_stories,
+        'show_carousel': show_carousel
     }
     return render(request, 'pulmora/community.html', context)
 

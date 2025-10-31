@@ -11,38 +11,43 @@
 </head>
 <body>
     {% include 'pulmora/partials/header.html' %}
-    
     {% include 'pulmora/partials/breadcrumb.html' %}
 
     <div class="community-container">
         <header class="community-header">
-            <img src="{% static 'img/hojita.png' %}">
+            <img src="{% static 'img/hojita.png' %}" alt="Icono de hoja">
             <h1>Comunidad Pulmora</h1>
-            <p>Unete a miles de persona que ya están tomando acción por el planeta. Comparte, aprende y crece junto a nuesta comunidad</p>
+            <p>Únete a miles de personas que ya están tomando acción por el planeta. Comparte, aprende y crece junto a nuestra comunidad.</p>
         </header>
        
-        <section class="succsess-stories">
-            <h2 class="section-title">💖Historias de Éxito</h2>
-            <div class="stories-grid">
-                {% for story in success_stories %}
-                    <div class="story-card">
-                        <div class="story-author">
-                            <div class="author-info">
-                                <span class="author-name">{{ story.author.get_full_name|default:story.author.username }}</span>
+        <section class="success-stories">
+            <h2 class="section-title">💖 Historias de Éxito</h2>
+            <div class="carousel-container">
+                <button id="prev-story" class="carousel-btn prev"></button>
+                
+                <div class="stories-grid-js">
+                    {% for story in success_stories %}
+                        <div class="story-card">
+                            <div class="story-header">
+                                <div class="story-avatar">{{ story.author.username.0|upper }}</div>
+                                <div class="story-author-info">
+                                    <h3>{{ story.author.get_full_name|default:story.author.username }}</h3>
+                                </div>
+                            </div>
+                            <p class="story-quoute">"{{ story.content|truncatewords:30 }}"</p>
+                            <div class="story-stats">
+                                <span>{{ story.total_likes }} Me gusta</span>
+                                <span>{{ story.comments.count }} Comentarios</span>
                             </div>
                         </div>
-                        <p class="story-quoute">"{{ story.content|truncatewords:40 }}"</p>
-                        <div class="story-stats">
-                            <span>{{ story.likes }} Me gusta</span>
-                            <span>{{ story.comments.count }} Comentarios</span>
-                        </div>
-                    </div>
-                {% empty %}
-                <p class="empty-messsage">Aún no se han publicados historia. ¡Anímate a contar la tuya!</p>
-                {% endfor %}
+                    {% empty %}
+                        <p class="empty-message">Aún no se han publicado historias.</p>
+                    {% endfor %}
+                </div>
+
+                <button id="next-story" class="carousel-btn next"></button>
             </div>
         </section>
-
 
         <section class="community-forum">
             <div class="new-post-container">
@@ -50,22 +55,24 @@
                     <h3>Únete a la conversación</h3>
                     <form id="new-post-form" method="post" action="{% url 'community' %}">
                         {% csrf_token %}
-                        <input type="text" id="post-title" name="post-title" placeholder="Titulo" required>
+                        <input type="text" id="post-title" name="post-title" placeholder="Título" required>
                         <textarea id="post-content" name="post-content" placeholder="Comparte tu historia" rows="5" required></textarea>
-                        <button type="submit" class="btn-primary">Publicar</button>
+                        <button type="submit" class="btn-primary btn-full">Publicar</button>
                     </form>
                 {% else %}
-                <div class="register-box">
-                    <h3>Únete a las conversaciones</h3>
-                    <p>Regístrate o inicia sesión para compartir tus historias, preguntas o ideas</p>
-                    <div class="auth-buttons">
-                        <a href="{% url 'register' %}" class="btn btn-secondary">Registrarse</a>
-                        <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                    <div class="register-box">
+                        <h3>Únete a las conversaciones</h3>
+                        <p>Regístrate o inicia sesión para compartir tus historias, preguntas o ideas.</p>
+                        <div class="auth-buttons">
+                            <a href="{% url 'register' %}" class="btn btn-secondary">Registrarse</a>
+                            <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+                        </div>
                     </div>
                 {% endif %}
-                </div>
             </div>
         </section>
     </div>
+
+    <script src="{% static 'js/community.js' %}"></script>
 </body>
 </html>
