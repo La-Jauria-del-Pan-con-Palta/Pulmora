@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from . import apis
 from .models import Post, Comment
 from django.db.models import Count
+from django.http import JsonResponse
 
 # Principal function, only render the main page
 def index(request):
@@ -85,6 +86,48 @@ def post_details(request, post_id):
         ]
     }
     return render(request, 'pulmora/post_detail.html', context)
+
+@login_required
+def like_post_view(request, post_id ):
+    if request.method == 'POST':
+        try:
+            post = Post.objects.get(pk=post_id)
+            user = request.user
+            
+            if user in post.likes.all():
+                post.likes.remove(user)
+                liked = False
+            else:
+                post.likes.add(user)
+                liked = True
+            
+            return JsonResponse({'liked': liked, 'total_likes': post.total_likes})
+
+        except Post.DoesNotExist:
+            return JsonResponse({'error': 'El post no existe.'}, status=404)
+    
+    return JsonResponse({'error': 'Método no permitido.'}, status=405)
+
+@login_required
+def like_comment_view(request, comment_id):
+    if request.method == 'POST':
+        try:
+            comment = Comment.objects.get(pk=comment_id)
+            user = request.user
+            
+            if user in comment.likes.all():
+                comment.likes.remove(user)
+                liked = False
+            else:
+                comment.likes.add(user)
+                liked = True
+            
+            return JsonResponse({'liked': liked, 'total_likes': comment.total_likes})
+
+        except Comment.DoesNotExist:
+            return JsonResponse({'error': 'El comentario no existe.'}, status=404)
+    
+    return JsonResponse({'error': 'Método no permitido.'}, status=405)
 
 def data(request):
     countries= [

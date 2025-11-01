@@ -39,7 +39,9 @@
                             </a>
                             
                             <div class="story-stats">
-                                <span>{{ story.total_likes }} Me gusta</span>
+                                <button class="like-btn {% if user in story.likes.all %}liked{% endif %}" data-post-id="{{ story.id }}">
+                                    <span class="like-count">{{ story.total_likes }}</span> Me gusta
+                                </button>
                                 <a href="{% url 'post_detail' story.id %}" class="comment-link">
                                     {{ story.comments.count }} Comentarios
                                 </a>
@@ -79,5 +81,6 @@
     </div>
 
     <script src="{% static 'js/community.js' %}"></script>
+    <script src="{% static 'js/likes.js' %}"></script>
 </body>
 </html>

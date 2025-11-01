@@ -25,37 +25,43 @@
                 </div>
             </article>
         </div>
+        
         <hr>
 
-    <section class="comments-section">
-        <h2>Comentarios ({{ comments.count }})</h2>
+        <section class="comments-section">
+            <h2>Comentarios ({{ comments.count }})</h2>
 
-        {% if user.is_authenticated %}
-            <form class="new-comment-form" method="post">
-                {% csrf_token %}
-                <textarea name="comment-content" placeholder="Escribe tu comentario..." required></textarea>
-                <button type="submit" class="btn btn-primary">Comentar</button>
-            </form>
-        {% else %}
-            <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para poder comentar.</p>
-        {% endif %}
+            {% if user.is_authenticated %}
+                <form class="new-comment-form" method="post">
+                    {% csrf_token %}
+                    <textarea name="comment-content" placeholder="Escribe tu comentario..." required></textarea>
+                    <button type="submit" class="btn btn-primary">Comentar</button>
+                </form>
+            {% else %}
+                <p>Debes <a href="{% url 'login' %}">iniciar sesión</a> para poder comentar.</p>
+            {% endif %}
 
-        <div class="comment-list">
-            {% for comment in comments %}
-                <div class="comment-card">
-                    <div class="comment-author">
-                        <strong>{{ comment.author.username }}</strong>
-                        <span class="comment-date">{{ comment.created_at|timesince }} atrás</span>
+            <div class="comment-list">
+                {% for comment in comments %}
+                    <div class="comment-card">
+                        <div class="comment-author">
+                            <strong>{{ comment.author.username }}</strong>
+                            <span class="comment-date">{{ comment.created_at|timesince }} atrás</span>
+                        </div>
+                        <p>{{ comment.content|linebreaks }}</p>
+                        
+                        <div class="comment-actions">
+                            <button class="like-btn comment-like-btn {% if user in comment.likes.all %}liked{% endif %}" data-comment-id="{{ comment.id }}">
+                                <span class="like-count">{{ comment.total_likes }}</span> Me gusta
+                            </button>
+                        </div>
                     </div>
-                    <p>{{ comment.content|linebreaks }}</p>
-                </div>
-            {% empty %}
-                <p>Todavía no hay comentarios. ¡Sé el primero en comentar!</p>
-            {% endfor %}
-        </div>
-    </section>
-
-</div>
+                {% empty %}
+                    <p>Todavía no hay comentarios. ¡Sé el primero en comentar!</p>
+                {% endfor %}
+            </div>
+        </section>
     </main>
+    <script src="{% static 'js/likes.js' %}"></script>
 </body>
 </html>

@@ -14,5 +14,9 @@ urlpatterns = [
     path('community/', views.community, name="community"),
     path('post/<int:post_id>/', views.post_details, name='post_detail'),
     path('data/', views.data, name="data"),
-    path('education/', views.education, name="education")
+    path('education/', views.education, name="education"),
+
+    #This urls are not for render a specific pages, are neccesary for the comment an likes funtion
+    path('like-post/<int:post_id>/', views.like_post_view, name='like_post'),
+    path('like-comment/<int:comment_id>/', views.like_comment_view, name='like_comment'),
 ]
