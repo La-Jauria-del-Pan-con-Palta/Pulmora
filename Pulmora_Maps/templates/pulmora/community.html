@@ -28,16 +28,21 @@
                 <div class="stories-grid-js">
                     {% for story in success_stories %}
                         <div class="story-card">
-                            <div class="story-header">
-                                <div class="story-avatar">{{ story.author.username.0|upper }}</div>
-                                <div class="story-author-info">
-                                    <h3>{{ story.author.get_full_name|default:story.author.username }}</h3>
+                            <a href="{% url 'post_detail' story.id %}" class="story-link-wrapper">
+                                <div class="story-header">
+                                    <div class="story-avatar">{{ story.author.username.0|upper }}</div>
+                                    <div class="story-author-info">
+                                        <h3>{{ story.title }}</h3>
+                                    </div>
                                 </div>
-                            </div>
-                            <p class="story-quoute">"{{ story.content|truncatewords:30 }}"</p>
+                                <p class="story-quoute">"{{ story.content|truncatewords:30 }}"</p>
+                            </a>
+                            
                             <div class="story-stats">
                                 <span>{{ story.total_likes }} Me gusta</span>
-                                <span>{{ story.comments.count }} Comentarios</span>
+                                <a href="{% url 'post_detail' story.id %}" class="comment-link">
+                                    {{ story.comments.count }} Comentarios
+                                </a>
                             </div>
                         </div>
                     {% empty %}

@@ -12,6 +12,7 @@ urlpatterns = [
 
     #News urls, to make the breadcrumb and move more easily between pages
     path('community/', views.community, name="community"),
+    path('post/<int:post_id>/', views.post_details, name='post_detail'),
     path('data/', views.data, name="data"),
     path('education/', views.education, name="education")
 ]

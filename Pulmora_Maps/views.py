@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from . import apis
-from .models import Post
+from .models import Post, Comment
 from django.db.models import Count
 
 # Principal function, only render the main page
@@ -64,6 +64,27 @@ def community(request):
     }
     return render(request, 'pulmora/community.html', context)
 
+def post_details(request, post_id):
+    post = get_object_or_404(Post,pk=post_id)
+
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            content = request.POST.get('comment-content')
+            if content:
+                Comment.objects.create(post=post, author=request.user, content=content)
+                return redirect('post_detail', post_id=post.id)
+            
+    comments = post.comments.all()
+
+    context = {
+        'post': post,
+        'comments': comments,
+        'breadcrumb': [
+            {'name': 'comunidad', 'url': 'community'},
+            {'name': post.title, 'url': None}
+        ]
+    }
+    return render(request, 'pulmora/post_detail.html', context)
 
 def data(request):
     countries= [
