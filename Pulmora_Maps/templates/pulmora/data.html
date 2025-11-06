@@ -20,27 +20,23 @@
         
         <div class="dashboard-wrapper">
             <div class="main-title">
-                <h1>Datos por Paises 🌎</h1>
+                <h1>Datos por paises</h1>
             </div>
             <div class="map-section">
                 <div id="interactive-map"></div>
                 <div class="map-legend">
-                    <h4>Emisiones de Co2 per capíta</h4>
+                    <h4>Calidad del Aire (AQI)</h4>
                     <ul>
-                        <li><span class="color-box" style="background-color: #d9534f;"></span> Alto (>10t )</li>
-                        <li><span class="color-box" style="background-color: #f0ad4e;"></span> Medio (5-10t)</li>
-                        <li><span class="color-box" style="background-color: #5cb85c;"></span> Bajo (2-5t)</li>
-                        <li><span class="color-box" style="background-color: #a4d6a4;"></span> Muy bajo (<2t)</li>
+                        <li><span class="color-box" style="background-color: #a4d6a4;"></span> Buena (1)</li>
+                        <li><span class="color-box" style="background-color: #5cb85c;"></span> Regular (2)</li>
+                        <li><span class="color-box" style="background-color: #f0ad4e;"></span> Moderada (3)</li>
+                        <li><span class="color-box" style="background-color: #d9534f;"></span> Mala (4)</li>
+                        <li><span class="color-box" style="background-color: #8b0000;"></span> Muy Mala (5)</li>
                     </ul>
                 </div>
             </div>
 
             <div class="kpi-cards-container">
-                <div class="card" id="card-co2-per-capita">
-                    <img src="{% static 'img/users.png' %}" alt="Huella per cápita">
-                    <h3 id="kpi-value-co2">-- t</h3>
-                    <p>Huella per cápita (CO₂e)</p>
-                </div>
                 <div class="card" id="card-aqi">
                     <img src="{% static 'img/metrics.png' %}" alt="Calidad del Aire">
                     <h3 id="kpi-value-aqi">--</h3>
@@ -54,22 +50,31 @@
                 <div class="card" id="card-main-pollutant">
                     <img src="{% static 'img/target.png' %}" alt="Contaminante principal">
                     <h3 id="kpi-value-main-pollutant">--</h3>
-                    <p>Contaminante principal</p>
+                    <p>Contaminante más peligroso</p>
+                </div>
+                <div class="card" id="card-pm25">
+                    <img src="{% static 'img/users.png' %}" alt="PM2.5">
+                    <h3 id="kpi-value-pm25">-- µg/m³</h3>
+                    <p>Partículas PM2.5</p>
                 </div>
             </div>
 
             <div class="charts-container">
                 <div class="chart-card">
-                    <h4>Emisiones por Continente</h4>
-                    <canvas id="emissions-by-continent-chart"></canvas>
+                    <h4>Distribución de Calidad del Aire</h4>
+                    <canvas id="aqi-distribution-chart"></canvas>
                 </div>
                 <div class="chart-card">
-                    <h4>Principales Sectores Emisores</h4>
-                    <canvas id="emissions-by-sector-chart"></canvas>
+                    <h4>Contaminantes vs Límites OMS</h4>
+                    <canvas id="pollutants-chart"></canvas>
                 </div>
             </div>
         </div>
     </main>
+
+    <script id="countries-data" type="application/json">
+        {{ data_maps|safe }}
+    </script>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

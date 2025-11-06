@@ -1,19 +1,20 @@
 import requests
-import os
 import google as genai
+from django.conf import settings
 
 def air_quality(lat, lon):
-    api_key = os.environ.get('OPENWEATHER_API_KEY')
+    api_key = settings.OPENWEATHER_API_KEY
     if not api_key:
-        print('Error: No se encuentra la API de OpenWheather')
+        print('Error: No se encuentra la API de OpenWeather')
         return None
     
     url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={api_key}"
 
     try:
-        response = response.get(url)
+        response = requests.get(url)
         response.raise_for_status()
-        data = response.json
+        data = response.json()
+        
         if data.get('list'):
             air_data = data['list'][0]
             return {
@@ -27,7 +28,7 @@ def air_quality(lat, lon):
     
 #The first of many API requests to do in Climatiq / improved
 def co2_emmissions(country_code: str, year: int = 2024):
-    api_key = os.environ.get('CLIMATIQ_API_KEY')
+    api_key = settings.CLIMATIQ_API_KEY
     if not api_key:
         print('Error: No se encuentra la API de Climatiq')
 

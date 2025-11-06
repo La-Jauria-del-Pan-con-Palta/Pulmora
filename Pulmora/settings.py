@@ -5,6 +5,10 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
+CLIMATIQ_API_KEY = os.getenv('CLIMATIQ_API_KEY')
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
+
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
