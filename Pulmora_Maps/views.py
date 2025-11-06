@@ -174,11 +174,10 @@ def data(request):
         {'name': 'Kenia', 'code': 'KE', 'lat': '-0.023559', 'lon': '37.906193'},
     ]
     
-    data_list = []
+    air_quality_data = []
     for country in countries:
         aqi_data = apis.air_quality(country['lat'], country['lon'])
-
-        data_list.append({
+        air_quality_data.append({
             'name': country['name'],
             'code': country['code'],
             'lat': float(country['lat']),
@@ -186,9 +185,12 @@ def data(request):
             'aqi': aqi_data['aqi'] if aqi_data else None,
             'components': aqi_data['components'] if aqi_data else None
         })
-
+    
+    co2_data = apis.get_co2_emissions(countries)
+    
     context = {
-        'data_maps': json.dumps(data_list),  
+        'air_quality_data': json.dumps(air_quality_data),
+        'co2_data': json.dumps(co2_data),
         'breadcrumb': [
             {'name': 'inicio', 'url': 'index'},
             {'name': 'datos', 'url': None}

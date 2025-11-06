@@ -17,63 +17,36 @@
     {% include 'pulmora/partials/breadcrumb.html' %}
 
     <main class="data-container">
-        
         <div class="dashboard-wrapper">
             <div class="main-title">
-                <h1>Datos por paises</h1>
+                <h1>Datos Ambientales por País</h1>
+                <div class="data-switch-container">
+                    <button class="switch-btn active" data-view="co2-emissions">
+                        Emisiones CO₂
+                    </button>
+                    <button class="switch-btn" data-view="air-quality">
+                        Calidad de Aire
+                    </button>
+                </div>
             </div>
             <div class="map-section">
                 <div id="interactive-map"></div>
-                <div class="map-legend">
-                    <h4>Calidad del Aire (AQI)</h4>
-                    <ul>
-                        <li><span class="color-box" style="background-color: #a4d6a4;"></span> Buena (1)</li>
-                        <li><span class="color-box" style="background-color: #5cb85c;"></span> Regular (2)</li>
-                        <li><span class="color-box" style="background-color: #f0ad4e;"></span> Moderada (3)</li>
-                        <li><span class="color-box" style="background-color: #d9534f;"></span> Mala (4)</li>
-                        <li><span class="color-box" style="background-color: #8b0000;"></span> Muy Mala (5)</li>
-                    </ul>
+                <div class="map-legend" id="map-legend">
                 </div>
             </div>
-
-            <div class="kpi-cards-container">
-                <div class="card" id="card-aqi">
-                    <img src="{% static 'img/metrics.png' %}" alt="Calidad del Aire">
-                    <h3 id="kpi-value-aqi">--</h3>
-                    <p>Índice Calidad del Aire</p>
-                </div>
-                <div class="card" id="card-aqi-level">
-                    <img src="{% static 'img/co2.png' %}" alt="Nivel de Calidad">
-                    <h3 id="kpi-value-aqi-level">Selecciona un país</h3>
-                    <p>Nivel Calidad del Aire</p>
-                </div>
-                <div class="card" id="card-main-pollutant">
-                    <img src="{% static 'img/target.png' %}" alt="Contaminante principal">
-                    <h3 id="kpi-value-main-pollutant">--</h3>
-                    <p>Contaminante más peligroso</p>
-                </div>
-                <div class="card" id="card-pm25">
-                    <img src="{% static 'img/users.png' %}" alt="PM2.5">
-                    <h3 id="kpi-value-pm25">-- µg/m³</h3>
-                    <p>Partículas PM2.5</p>
-                </div>
+            <div class="kpi-cards-container" id="kpi-cards">
             </div>
-
-            <div class="charts-container">
-                <div class="chart-card">
-                    <h4>Distribución de Calidad del Aire</h4>
-                    <canvas id="aqi-distribution-chart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h4>Contaminantes vs Límites OMS</h4>
-                    <canvas id="pollutants-chart"></canvas>
-                </div>
+            <div class="charts-container" id="charts-container">
             </div>
         </div>
     </main>
 
-    <script id="countries-data" type="application/json">
-        {{ data_maps|safe }}
+    <script id="air-quality-data" type="application/json">
+        {{ air_quality_data|safe }}
+    </script>
+
+    <script id="co2-data" type="application/json">
+        {{ co2_data|safe }}
     </script>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
