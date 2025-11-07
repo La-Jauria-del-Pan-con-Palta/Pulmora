@@ -1,6 +1,7 @@
 import requests
 import google as genai
 from django.conf import settings
+from django.core.cache import cache
 import pandas as pd
 from .coords import COUNTRIES_COORDINATES, normalize_country_name
 
@@ -27,6 +28,37 @@ def air_quality(lat, lon):
     except requests.exceptions.RequestException as e:
         print(f"Error al llamar a la API de OpenWeather: {e}")
         return None
+
+def air_quality_cache():
+    cache_key = 'air_quality_cache'
+    cached_data = cache.get(cache_key)
+    if cached_data:
+        return cached_data
+
+    print('Cache vacia, se demorara en renderizar la pagina')
+    air_quality_data = []
+    processed = 0
+
+    for country_name, country_info in COUNTRIES_COORDINATES.items():
+        processed += 1
+
+        aqi_data = air_quality(country_info['lat'], country_info['lon'])
+
+        if aqi_data:
+            air_quality_data.append({
+                'name': country_name,
+                'code': country_info['code'],
+                'lat': country_info['lat'],
+                'lon': country_info['lon'],
+                'aqi': aqi_data['aqi'],
+                'components': aqi_data['components']
+            })
+            print('Datos agregados')
+        else:
+            print('Error al agregar los datos')
+    
+    cache.set(cache_key, air_quality_data, 60 * 60 * 24)
+    return air_quality_data
 
 def co2_emissions():
         

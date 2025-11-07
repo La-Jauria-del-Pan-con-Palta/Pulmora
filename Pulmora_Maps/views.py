@@ -132,23 +132,10 @@ def like_comment_view(request, comment_id):
     return JsonResponse({'error': 'Método no permitido.'}, status=405)
 
 def data(request):
-    air_quality_data = []
-    
-    for country_name, country_info in COUNTRIES_COORDINATES.items():
-        aqi_data = apis.air_quality(country_info['lat'], country_info['lon'])
-        
-        if aqi_data:
-            air_quality_data.append({
-                'name': country_name,
-                'code': country_info['code'],
-                'lat': country_info['lat'],
-                'lon': country_info['lon'],
-                'aqi': aqi_data['aqi'],
-                'components': aqi_data['components']
-            })
+    air_quality_data = apis.air_quality_cache()
     
     co2_data = apis.co2_emissions()
-    
+
     context = {
         'air_quality_data': json.dumps(air_quality_data),
         'co2_data': json.dumps(co2_data),
