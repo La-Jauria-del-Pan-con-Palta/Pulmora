@@ -7,6 +7,7 @@ from .models import Post, Comment
 from django.db.models import Count
 from django.http import JsonResponse
 import json
+from .coords import COUNTRIES_COORDINATES
 
 # Principal function, only render the main page
 def index(request):
@@ -131,62 +132,22 @@ def like_comment_view(request, comment_id):
     return JsonResponse({'error': 'Método no permitido.'}, status=405)
 
 def data(request):
-    countries = [
-        # América del Sur
-        {'name': 'Chile', 'code': 'CL', 'lat': '-35.675147', 'lon': '-71.542969'},
-        {'name': 'Argentina', 'code': 'AR', 'lat': '-38.416097', 'lon': '-63.616672'},
-        {'name': 'Brasil', 'code': 'BR', 'lat': '-14.235004', 'lon': '-51.925280'},
-        {'name': 'Perú', 'code': 'PE', 'lat': '-9.189967', 'lon': '-75.015152'},
-        {'name': 'Colombia', 'code': 'CO', 'lat': '4.570868', 'lon': '-74.297333'},
-        {'name': 'Uruguay', 'code': 'UY', 'lat': '-32.522779', 'lon': '-55.765835'},
-        
-        # América del Norte
-        {'name': 'Estados Unidos', 'code': 'US', 'lat': '37.09024', 'lon': '-95.712891'},
-        {'name': 'México', 'code': 'MX', 'lat': '23.634501', 'lon': '-102.552784'},
-        {'name': 'Canadá', 'code': 'CA', 'lat': '56.130366', 'lon': '-106.346771'},
-        
-        # Europa
-        {'name': 'España', 'code': 'ES', 'lat': '40.463667', 'lon': '-3.74922'},
-        {'name': 'Francia', 'code': 'FR', 'lat': '46.227638', 'lon': '2.213749'},
-        {'name': 'Alemania', 'code': 'DE', 'lat': '51.165691', 'lon': '10.451526'},
-        {'name': 'Reino Unido', 'code': 'GB', 'lat': '55.378051', 'lon': '-3.435973'},
-        {'name': 'Italia', 'code': 'IT', 'lat': '41.871940', 'lon': '12.56738'},
-        {'name': 'Países Bajos', 'code': 'NL', 'lat': '52.132633', 'lon': '5.291266'},
-        {'name': 'Suecia', 'code': 'SE', 'lat': '60.128161', 'lon': '18.643501'},
-        {'name': 'Noruega', 'code': 'NO', 'lat': '60.472024', 'lon': '8.468946'},
-        
-        # Asia
-        {'name': 'China', 'code': 'CN', 'lat': '35.86166', 'lon': '104.195397'},
-        {'name': 'India', 'code': 'IN', 'lat': '20.593684', 'lon': '78.96288'},
-        {'name': 'Japón', 'code': 'JP', 'lat': '36.204824', 'lon': '138.252924'},
-        {'name': 'Corea del Sur', 'code': 'KR', 'lat': '35.907757', 'lon': '127.766922'},
-        {'name': 'Tailandia', 'code': 'TH', 'lat': '15.870032', 'lon': '100.992541'},
-        {'name': 'Vietnam', 'code': 'VN', 'lat': '14.058324', 'lon': '108.277199'},
-        
-        # Oceanía
-        {'name': 'Australia', 'code': 'AU', 'lat': '-25.274398', 'lon': '133.775136'},
-        {'name': 'Nueva Zelanda', 'code': 'NZ', 'lat': '-40.900557', 'lon': '174.885971'},
-        
-        # África
-        {'name': 'Sudáfrica', 'code': 'ZA', 'lat': '-30.559482', 'lon': '22.937506'},
-        {'name': 'Egipto', 'code': 'EG', 'lat': '26.820553', 'lon': '30.802498'},
-        {'name': 'Nigeria', 'code': 'NG', 'lat': '9.081999', 'lon': '8.675277'},
-        {'name': 'Kenia', 'code': 'KE', 'lat': '-0.023559', 'lon': '37.906193'},
-    ]
-    
     air_quality_data = []
-    for country in countries:
-        aqi_data = apis.air_quality(country['lat'], country['lon'])
-        air_quality_data.append({
-            'name': country['name'],
-            'code': country['code'],
-            'lat': float(country['lat']),
-            'lon': float(country['lon']),
-            'aqi': aqi_data['aqi'] if aqi_data else None,
-            'components': aqi_data['components'] if aqi_data else None
-        })
     
-    co2_data = apis.get_co2_emissions(countries)
+    for country_name, country_info in COUNTRIES_COORDINATES.items():
+        aqi_data = apis.air_quality(country_info['lat'], country_info['lon'])
+        
+        if aqi_data:
+            air_quality_data.append({
+                'name': country_name,
+                'code': country_info['code'],
+                'lat': country_info['lat'],
+                'lon': country_info['lon'],
+                'aqi': aqi_data['aqi'],
+                'components': aqi_data['components']
+            })
+    
+    co2_data = apis.co2_emissions()
     
     context = {
         'air_quality_data': json.dumps(air_quality_data),

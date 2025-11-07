@@ -2,6 +2,7 @@ import requests
 import google as genai
 from django.conf import settings
 import pandas as pd
+from .coords import COUNTRIES_COORDINATES, normalize_country_name
 
 def air_quality(lat, lon):
     api_key = settings.OPENWEATHER_API_KEY
@@ -27,49 +28,46 @@ def air_quality(lat, lon):
         print(f"Error al llamar a la API de OpenWeather: {e}")
         return None
 
-def get_co2_emissions(countries):
-    try:
+def co2_emissions():
         
-        url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
-        df = pd.read_csv(url)
-
-        latest_year = df['year'].max()
-        df_latest = df[df['year'] == latest_year]
+    url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
+    df = pd.read_csv(url)
         
-        co2_data = []
-        for country in countries:
-            country_name = country['name']
+    latest_year = df['year'].max()
+    df_latest = df[df['year'] == latest_year]
+        
+    exclude_entities = [
+        'World', 'Asia', 'Europe', 'Africa', 'North America', 
+        'South America', 'Oceania', 'European Union', 'High-income countries',
+        'Low-income countries', 'Middle-income countries'
+    ]
+        
+    df_countries = df_latest[~df_latest['country'].isin(exclude_entities)]
+    df_countries = df_countries[
+        (df_countries['co2_per_capita'].notna()) &
+        (df_countries['co2'].notna())
+    ]
+        
+    co2_data = []
+        
+    for _, row in df_countries.iterrows():
+        country_name = row['country']
+        normalized_name = normalize_country_name(country_name)
             
-            name_mapping = {
-                'Estados Unidos': 'United States',
-                'Reino Unido': 'United Kingdom',
-                'Países Bajos': 'Netherlands',
-            }
+        country_info = COUNTRIES_COORDINATES.get(normalized_name)
             
-            search_name = name_mapping.get(country_name, country_name)
-            country_data = df_latest[df_latest['country'] == search_name]
-            
-            if not country_data.empty:
-                co2_per_capita = country_data['co2_per_capita'].values[0]
-                total_co2 = country_data['co2'].values[0]
-            else:
-                co2_per_capita = None
-                total_co2 = None
-            
+        if country_info:
             co2_data.append({
-                'name': country['name'],
-                'code': country['code'],
-                'lat': float(country['lat']),
-                'lon': float(country['lon']),
-                'co2_per_capita': co2_per_capita,
-                'total_co2': total_co2
+                'name': country_name,
+                'code': country_info['code'],
+                'lat': country_info['lat'],
+                'lon': country_info['lon'],
+                'co2_per_capita': float(row['co2_per_capita']),
+                'total_co2': float(row['co2']) if pd.notna(row['co2']) else 0
             })
         
-        return co2_data
-    
-    except Exception as e:
-        print(f"Error al obtener datos de CO2: {e}")
-        return []
+    print(f"✅ Datos de CO2 obtenidos para {len(co2_data)} países")
+    return co2_data
 
 """def chatbox(promt):
     api_key = os.environ.get('GEMINI_API_KEY')
