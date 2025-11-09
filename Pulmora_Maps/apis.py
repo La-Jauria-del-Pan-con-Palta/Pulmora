@@ -1,5 +1,5 @@
 import requests
-import google as genai
+import google.generativeai as genai
 from django.conf import settings
 from django.core.cache import cache
 import pandas as pd
@@ -101,17 +101,17 @@ def co2_emissions():
     print(f"✅ Datos de CO2 obtenidos para {len(co2_data)} países")
     return co2_data
 
-"""def chatbox(promt):
-    api_key = os.environ.get('GEMINI_API_KEY')
+def chatbox(prompt):
+    api_key = settings.GEMINI_API_KEY
     if not api_key:
         print('Error: No se encuentra la API de Gemini')
         return None
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(promt)
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         print(f"Error al llamar a la API de Gemini: {e}")
-        return None"""
+        return None

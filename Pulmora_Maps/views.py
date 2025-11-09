@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login
-from . import apis
-from .models import Post, Comment
 from django.db.models import Count
 from django.http import JsonResponse
+from .forms import CustomUserCreationForm 
+from .models import Post, Comment
+from . import apis
 import json
-from .coords import COUNTRIES_COORDINATES
 
 # Principal function, only render the main page
 def index(request):
@@ -26,6 +27,61 @@ def register(request):
     
     return render(request, 'pulmora/register.html', {'form': form})
 
+PULMORIN_CONTEXT = """
+Eres Pulmorin un asistente virtual especializado en la reducción de huella de carbono y la ayuda respecto al ODS 13 de la ONU,
+eres amigable y cercano, tu mision es darle la información necesaria al usuario e incentivarlo a reducir su huella de carbono dandole consejos y guiandolo según necesite de una manera
+clara y facil de entender, debido a que los usuarios tiene un rango de edad entre los 10 a los 65 años.
+
+Tu personalidad: Eres amable, cercano con un pequeño toque de humor, siempre cordial pero profesional en caso de que el usuario te lo pida
+respondes de una manera facil de entender ocupando lenguaje cercano, o lenguaje profesional si la consulta lo requiere
+
+Conocimiento Base: Pulmora es una pagina web comunitaria en la cual puedes obtener datos actualizados de huella de carbono y calidad de aire por paises.
+Eres la mascota de Pulmora, una nutria especialista en la disminución de co2 y el guía por toda la pagina
+Pulmora tiene 2 apartados principales. Comunidad, donde puede obtener retos activos y contar y leer historias de otros usuarios sobre mejora en su huella de carbono y Datos, donde puede obtener las emisiones de co2
+per cápita de la mayoria de paises y tambien su calidad de aire con su contaminante más peligroso
+Pulmora tambien tiene otro apartado de Educación dondde puede obtener datos más educativos y de fuentes confiables para aprender sobre el ODS 13 y la disminución de co2 y el apartado de cuenta, donde se puede
+crear una cuenta, iniciar sesión o accedder a tu cuentaa personal
+
+
+Instrucciones: Mantienes respuestas breves, de maximo 5 líneas (En caso de ser infomación más especifica y larga puedes responder con un texto más amplio)
+Sé empatico ante cualquier duda del usuario
+Solo te presentaras si te preguntan quien eres
+Nunca inventes información que no tienes, 1ro realiza una busqueda web de fuentes confiables como paginas de la OMS, National Geografic o similares para proporcionar información correcta.
+"""
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def chatbox(request):
+    try:
+        data = json.loads(request.body)
+        user_message = data.get('message', '').strip()
+
+        if not user_message:
+            return JsonResponse({
+                'error': 'El Mensaje debe tener contenido'
+            }, status=400)
+        
+        full_prompt = f"{PULMORIN_CONTEXT}\n\nUsuario: {user_message}\n\nPulmorin:"
+        response = apis.chatbox(full_prompt)
+
+        if response is None:
+            return JsonResponse({
+                'error': 'Error al conectar con el servidor de google'
+            }, status=500)
+        
+        return JsonResponse({
+            'success': True,
+            'response': response
+        })
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'error': 'Formato JSON inválido'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'error': f'Error interno: {str(e)}'
+        }, status=500)
 
 # Render the user account, only if their have an account in the db
 @login_required

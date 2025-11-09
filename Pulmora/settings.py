@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
-
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 CACHES = {
