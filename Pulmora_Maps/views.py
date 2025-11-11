@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CustomUserCreationForm 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login
-from . import apis
-from .models import Post, Comment
 from django.db.models import Count
 from django.http import JsonResponse
+from .forms import CustomUserCreationForm 
+from .models import Post, Comment
+from . import apis, history
+import json
 
 # Principal function, only render the main page
 def index(request):
@@ -24,6 +27,55 @@ def register(request):
     
     return render(request, 'pulmora/register.html', {'form': form})
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def chatbox(request):
+    try:
+        data = json.loads(request.body)
+        user_message = data.get('message', '').strip()
+
+        if not user_message:
+            return JsonResponse({
+                'error': 'El Mensaje debe tener contenido'
+            }, status=400)
+
+        user_session_id = history.session_id(request)
+        conversation_history = history.create_history(user_session_id)
+        full_prompt = history.history_prompt(conversation_history, user_message)
+        response = apis.chatbox(full_prompt)
+
+        if response is None:
+            return JsonResponse({
+                'error': 'Error al conectar con el servidor de Google'
+            }, status=500)
+        
+        history.add_history(user_session_id, user_message, response)
+
+        json_response = JsonResponse({
+            'success': True,
+            'response': response
+        })
+
+        if not request.user.is_authenticated:
+            session_id_value = user_session_id.replace('anon_', '')
+            json_response.set_cookie(
+                'pulmorin_session_id',
+                session_id_value,
+                max_age=60*60*2,
+                httponly=True,
+                samesite='Lax'
+            )
+        
+        return json_response
+
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'error': 'Formato JSON inválido'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'error': f'Error interno: {str(e)}'
+        }, status=500)
 
 # Render the user account, only if their have an account in the db
 @login_required
@@ -130,36 +182,16 @@ def like_comment_view(request, comment_id):
     return JsonResponse({'error': 'Método no permitido.'}, status=405)
 
 def data(request):
-    countries= [
-        #template of all countries {'name': '', 'code': '', 'lat': '', 'lon': ''}
-        {'name': 'Chile', 'code': 'CL', 'lat': '-35.675147', 'lon': '-71.542969'}
-    ]
+    air_quality_data = apis.air_quality_cache()
     
-    data = []
-    for country in countries:
-        aqi = apis.air_quality(country['lat'], country['lon'])
-        co2 = apis.co2_emmissions(country['code'])
-
-        data.append({
-            'name': country['name'],
-            'lat': country['lat'],
-            'lon': country['lon'],
-            'aqi': aqi,
-            'co2': co2
-        })
+    co2_data = apis.co2_emissions()
 
     context = {
-        'data_maps': data,
-
+        'air_quality_data': json.dumps(air_quality_data),
+        'co2_data': json.dumps(co2_data),
         'breadcrumb': [
-            {
-                'name': 'inicio', 
-                'url': 'index'
-             },
-            {
-                'name': 'datos',
-                'url': None
-            }
+            {'name': 'inicio', 'url': 'index'},
+            {'name': 'datos', 'url': None}
         ]
     }
     return render(request, 'pulmora/data.html', context)

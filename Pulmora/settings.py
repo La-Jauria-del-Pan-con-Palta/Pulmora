@@ -5,8 +5,20 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
+OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'pulmora-cache',
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

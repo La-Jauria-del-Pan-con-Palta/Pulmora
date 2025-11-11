@@ -1,0 +1,46 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/pulmorin.css' %}">
+
+<button id="pulmorin-button" aria-label="Abrir chat de Pulmorin">
+    <img src="{% static 'img/pulmorin.png' %}" alt="Pulmorin">
+</button>
+
+<div id="pulmorin-chat">
+    <div id="pulmorin-header">
+        <div>
+            <h3>Pulmorin</h3>
+            <small>Tu asistente y guía de confianza</small>
+        </div>
+        <button id="close-chat" aria-label="Cerrar chat">×</button>
+    </div>
+
+    <div id="pulmorin-messages">
+        <div class="message bot">
+            <div class="message-content">
+                ¡Hola! Soy Pulmorin, tu asistente y guía virtual. ¿En qué puedo ayudarte hoy?
+            </div>
+        </div>
+        <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <div id="pulmorin-input-area">
+        <input 
+            type="text" 
+            id="pulmorin-input" 
+            placeholder="Escribe tu mensaje..."
+            autocomplete="off"
+        >
+        <button id="send-button" aria-label="Enviar mensaje">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<script src="{% static 'js/pulmorin.js' %}"></script>

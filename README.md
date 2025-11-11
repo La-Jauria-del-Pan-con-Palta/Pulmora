@@ -1,7 +1,8 @@
-# Pulmora Update v-2.1.1 /scripts/
+# Pulmora Pulmorin Update
 
 > [!NOTE]
->Ya que la profesora me recomendo de ya implementar las APIs, inicie con eso, y por lo tanto ya inicie con los pequeños cambios con la creación de los llamados a las APIs, al mismo tiempo cambie los 2 errores que tenia que hacia que no me funcionara el breadcrumb y ahora es totalmente funcional como una forma beta, el cual solamente lleva al index y te dice en que pagina estas actualmente, pero luego dejare eso para que lleve entre las diferentes paginas en caso de presionar más de una. Actualmente solo me concentrare en las views y ya el funcionameinto correcto de todo lo que necesite APIs, osea el mapa interactivo, y por lo tanto también el chatbox.
+>Tenemos la 1ra versión funcional de Pulmorin conectado con la API de gemini, actualmente no tiene un sistema de historial, por lo cual cada mensaje que se le envia es una nueva petición y es como iniciar un nuevo chat. El diseño del widget también es provisional, y necesitare de su ayuda para tener una mejor imagen.
+>La proxima versión en ser subida ser con el formato de historial ya generado ocupando o base de datos o cookies de sesión y solucionando pequeños errores de diseño que tiene el actual en el texto de presentación.
 
 >[!IMPORTANT]
 >Si quieren debuggear el programa, deben utilizar el comando "python manage.py runserver", si ocupan del debugger de VS Code, no les funcionara correctaamente

@@ -1,19 +1,23 @@
 import requests
-import os
-import google as genai
+import google.generativeai as genai
+from django.conf import settings
+from django.core.cache import cache
+import pandas as pd
+from .coords import COUNTRIES_COORDINATES, normalize_country_name
 
 def air_quality(lat, lon):
-    api_key = os.environ.get('OPENWEATHER_API_KEY')
+    api_key = settings.OPENWEATHER_API_KEY
     if not api_key:
-        print('Error: No se encuentra la API de OpenWheather')
+        print('Error: No se encuentra la API de OpenWeather')
         return None
     
     url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={api_key}"
 
     try:
-        response = response.get(url)
+        response = requests.get(url)
         response.raise_for_status()
-        data = response.json
+        data = response.json()
+        
         if data.get('list'):
             air_data = data['list'][0]
             return {
@@ -24,54 +28,90 @@ def air_quality(lat, lon):
     except requests.exceptions.RequestException as e:
         print(f"Error al llamar a la API de OpenWeather: {e}")
         return None
+
+def air_quality_cache():
+    cache_key = 'air_quality_cache'
+    cached_data = cache.get(cache_key)
+    if cached_data:
+        return cached_data
+
+    print('Cache vacia, se demorara en renderizar la pagina')
+    air_quality_data = []
+    processed = 0
+
+    for country_name, country_info in COUNTRIES_COORDINATES.items():
+        processed += 1
+
+        aqi_data = air_quality(country_info['lat'], country_info['lon'])
+
+        if aqi_data:
+            air_quality_data.append({
+                'name': country_name,
+                'code': country_info['code'],
+                'lat': country_info['lat'],
+                'lon': country_info['lon'],
+                'aqi': aqi_data['aqi'],
+                'components': aqi_data['components']
+            })
+            print('Datos agregados')
+        else:
+            print('Error al agregar los datos')
     
-#The first of many API requests to do in Climatiq / improved
-def co2_emmissions(country_code: str, year: int = 2024):
-    api_key = os.environ.get('CLIMATIQ_API_KEY')
-    if not api_key:
-        print('Error: No se encuentra la API de Climatiq')
+    cache.set(cache_key, air_quality_data, 60 * 60 * 24)
+    return air_quality_data
 
-    url = "https://api.climatiq.io/v1/estimate"
-    headers = {"Authorization": f"Bearer {api_key}"}
+def co2_emissions():
+        
+    url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
+    df = pd.read_csv(url)
+        
+    latest_year = df['year'].max()
+    df_latest = df[df['year'] == latest_year]
+        
+    exclude_entities = [
+        'World', 'Asia', 'Europe', 'Africa', 'North America', 
+        'South America', 'Oceania', 'European Union', 'High-income countries',
+        'Low-income countries', 'Middle-income countries'
+    ]
+        
+    df_countries = df_latest[~df_latest['country'].isin(exclude_entities)]
+    df_countries = df_countries[
+        (df_countries['co2_per_capita'].notna()) &
+        (df_countries['co2'].notna())
+    ]
+        
+    co2_data = []
+        
+    for _, row in df_countries.iterrows():
+        country_name = row['country']
+        normalized_name = normalize_country_name(country_name)
+            
+        country_info = COUNTRIES_COORDINATES.get(normalized_name)
+            
+        if country_info:
+            co2_data.append({
+                'name': country_name,
+                'code': country_info['code'],
+                'lat': country_info['lat'],
+                'lon': country_info['lon'],
+                'co2_per_capita': float(row['co2_per_capita']),
+                'total_co2': float(row['co2']) if pd.notna(row['co2']) else 0
+            })
+        
+    print(f"✅ Datos de CO2 obtenidos para {len(co2_data)} países")
+    return co2_data
 
-    payload = {
-        "emissions_factor": {
-            "activity_id": "financial_spend-scope_3_cat_15_per_capita_co2e",
-            "region": country_code,
-            "year": year,
-            "source": "EXIOBASE",
-            "data_version": "^3"
-        },
-    #It's only needed to call the API, the essentials are already done
-    "parameters": {
-        "money": 1,
-        "money_unit": "usd"
-    }
-    }
-
-    try:
-        response = requests.post(url, json=payload, headers=headers)
-        response.raise_for_status()
-        data = response.json()
-        return data.get('co2e')
-    except requests.exceptions.HTTPError as e:
-        print(f'Error HTTP para {country_code}: {e.response.status_code} - {e.response.text}')
-        return None
-    except requests.exceptions.RequestException as e:
-        print(f'Error al llamar a la API de Climatiq: {e}')
-        return None
-
-"""def chatbox(promt):
-    api_key = os.environ.get('GEMINI_API_KEY')
+def chatbox(prompt):
+    api_key = settings.GEMINI_API_KEY
     if not api_key:
         print('Error: No se encuentra la API de Gemini')
         return None
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(promt)
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         print(f"Error al llamar a la API de Gemini: {e}")
-        return None"""
+        return None

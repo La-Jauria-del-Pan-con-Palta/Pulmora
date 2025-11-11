@@ -19,4 +19,5 @@ urlpatterns = [
     #This urls are not for render a specific pages, are neccesary for the comment an likes funtion
     path('like-post/<int:post_id>/', views.like_post_view, name='like_post'),
     path('like-comment/<int:comment_id>/', views.like_comment_view, name='like_comment'),
+    path('api/chatbox/', views.chatbox, name="chatbox")
 ]
