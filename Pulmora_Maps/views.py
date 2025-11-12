@@ -14,6 +14,9 @@ import json
 def index(request):
     return render(request, "pulmora/index.html")
 
+def edit_account(request):
+    return render(request, 'pulmora/edit_account.html')
+
 # Create a new page, where the user can be create an account and save their data
 def register(request):
     if request.method == "POST":

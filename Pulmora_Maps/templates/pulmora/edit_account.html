@@ -1,0 +1,150 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/edit_account.css' %}">
+    <title>Mi Perfil - Pulmora</title>
+</head>
+
+<body>
+    {% include 'pulmora/partials/header.html' %}
+
+    <div class="profile-container">
+        <div id="successMessage" class="success-message">
+            ✓ Perfil guardado exitosamente
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">📝 Crear Mi Perfil</h2>
+
+            <form id="profileForm">
+                <div class="avatar-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <span id="avatarEmoji">🙂</span>
+                    </div>
+                    <div>
+                        <label>Elige tu avatar</label>
+                        <div class="emoji-picker">
+                            <div class="emoji-option selected" data-emoji="🙂" onclick="selectEmoji('🙂')">🙂</div>
+                            <div class="emoji-option" data-emoji="😊" onclick="selectEmoji('😊')">😊</div>
+                            <div class="emoji-option" data-emoji="🐻" onclick="selectEmoji('🐻')">🐻</div>
+                            <div class="emoji-option" data-emoji="🦊" onclick="selectEmoji('🦊')">🦊</div>
+                            <div class="emoji-option" data-emoji="🐼" onclick="selectEmoji('🐼')">🐼</div>
+                            <div class="emoji-option" data-emoji="🌱" onclick="selectEmoji('🌱')">🌱</div>
+                            <div class="emoji-option" data-emoji="🌳" onclick="selectEmoji('🌳')">🌳</div>
+                            <div class="emoji-option" data-emoji="🌻" onclick="selectEmoji('🌻')">🌻</div>
+                        </div>
+                        <p class="info-text">O sube tu propia imagen</p>
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;"
+                            onchange="handleImageUpload(event)">
+                        <button type="button" class="avatar-upload-btn"
+                            onclick="document.getElementById('avatarUpload').click()">
+                            📤 Subir imagen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" id="nombre" placeholder="Ej: Clara López" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" placeholder="tu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pais">País 🌍</label>
+                    <select id="pais">
+                        <option value="">Selecciona tu país</option>
+                        <option value="MX">🇲🇽 México</option>
+                        <option value="ES">🇪🇸 España</option>
+                        <option value="AR">🇦🇷 Argentina</option>
+                        <option value="CO">🇨🇴 Colombia</option>
+                        <option value="CL">🇨🇱 Chile</option>
+                        <option value="PE">🇵🇪 Perú</option>
+                        <option value="US">🇺🇸 Estados Unidos</option>
+                        <option value="otro">🌎 Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Biografía</label>
+                    <textarea id="bio"
+                        placeholder="Cuéntanos sobre ti y tu compromiso con el medio ambiente..."></textarea>
+                    <p class="info-text">Ej: Aficionada a la naturaleza y el senderismo ✅</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo">Mi objetivo ambiental</label>
+                    <textarea id="objetivo" placeholder="¿Qué quieres lograr?"></textarea>
+                    <p class="info-text">Ej: Trabajando para reducir mi huella</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="intereses">Intereses principales</label>
+                        <select id="intereses">
+                            <option value="">Selecciona...</option>
+                            <option value="reciclaje">♻️ Reciclaje</option>
+                            <option value="transporte">🚴 Transporte verde</option>
+                            <option value="alimentacion">🥗 Alimentación sostenible</option>
+                            <option value="energia">⚡ Energía renovable</option>
+                            <option value="conservacion">🌳 Conservación</option>
+                            <option value="educacion">📚 Educación ambiental</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nivel">Nivel de experiencia</label>
+                        <select id="nivel">
+                            <option value="">Selecciona...</option>
+                            <option value="principiante">🌱 Principiante</option>
+                            <option value="intermedio">🌿 Intermedio</option>
+                            <option value="avanzado">🌳 Avanzado</option>
+                            <option value="experto">🏆 Experto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="publico">
+                    <label for="publico" style="margin-bottom: 0;">Hacer mi perfil público en la comunidad</label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Guardar Perfil</button>
+                    <button type="button" class="btn btn-secondary" onclick="previewProfile()">👁️ Vista Previa</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" id="previewCard" style="display: none;">
+            <h2 class="card-title">👀 Vista Previa de tu Perfil</h2>
+            <div class="preview-section">
+                <div class="preview-header">
+                    <div class="preview-avatar" id="previewAvatar">
+                        🙂
+                    </div>
+                    <div class="preview-info">
+                        <h3 id="previewNombre">Tu Nombre</h3>
+                        <div class="preview-bio" id="previewBio">Tu biografía aparecerá aquí</div>
+                        <div class="preview-bio" id="previewObjetivo" style="margin-top: 5px;">Tu objetivo aparecerá
+                            aquí</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/edit-account.js' %}"></script>
+</body>
+
+</html>
