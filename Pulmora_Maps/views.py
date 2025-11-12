@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import login
+from django.contrib import messages
 from django.db.models import Count
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm 
 from .models import Post, Comment
+from .retos import ChallengeService, RewardService, calculate_user_stats
 from . import apis, history
 import json
 
@@ -80,6 +82,30 @@ def chatbox(request):
 # Render the user account, only if their have an account in the db
 @login_required
 def account(request):
+    active_challenges = ChallengeService.active_for_user(request.user)
+    completed_count = ChallengeService.count_completed(request.user)
+    
+    user_rewards = RewardService.user_rewards(request.user)
+    all_rewards = RewardService.get_all()
+    next_reward_progress = RewardService.next_reward_progress(
+        request.user,
+        completed_count
+    )
+    
+    stats = calculate_user_stats(request.user)
+    
+    earned_reward_ids = [ur.recompensa_id for ur in user_rewards]
+    
+    context = {
+        'user': request.user,
+        'active_challenges': active_challenges,
+        'completed_count': completed_count,
+        'user_rewards': user_rewards,
+        'all_rewards': all_rewards,
+        'earned_reward_ids': earned_reward_ids,
+        'next_reward_progress': next_reward_progress,
+        'stats': stats,
+    }
     return render(request, 'pulmora/account.html')
 
 # Render the difference pages useful with a bredcrumb in all of there
@@ -210,3 +236,84 @@ def education(request):
         ]
     }
     return render(request, 'pulmora/education.html', context)
+
+@login_required
+def challenge_list(request):
+    challenges = ChallengeService.get_active()
+    user_challenges = ChallengeService.user_challenges(request.user)
+    completed_count = ChallengeService.count_completed(request.user)
+    
+    new_rewards = RewardService.check_and_grant(request.user, completed_count)
+    
+    for reward in new_rewards:
+        messages.success(
+            request,
+            f'¡Felicidades! Has desbloqueado: {reward.icono} {reward.nombre}'
+        )
+    
+    context = {
+        'challenges': challenges,
+        'user_challenges': user_challenges,
+        'completed_count': completed_count,
+        'rewards': RewardService.user_rewards(request.user),
+    }
+    
+    return render(request, 'retos/lista_retos.html', context)
+
+
+@login_required
+def join_challenge(request, challenge_id):
+    if request.method == 'POST':
+        goal = int(request.POST.get('goal', 10))
+        
+        user_challenge, created = ChallengeService.join(
+            request.user,
+            challenge_id,
+            goal
+        )
+        
+        if created:
+            messages.success(request, '¡Te has unido al reto! 🎉')
+        else:
+            messages.info(request, 'Ya estás participando en este reto')
+    
+    return redirect('challenge_list')
+
+
+@login_required
+def update_challenge_progress(request, user_challenge_id):
+    if request.method != 'POST':
+        return JsonResponse({
+            'success': False, 
+            'error': 'Method not allowed'
+        }, status=405)
+    
+    result = ChallengeService.update_progress(user_challenge_id, request.user)
+    
+    if result['completed']:
+        completed_count = ChallengeService.count_completed(request.user)
+        new_rewards = RewardService.check_and_grant(
+            request.user, 
+            completed_count
+        )
+        
+        if new_rewards:
+            result['new_badges'] = [
+                {
+                    'name': reward.nombre,
+                    'icon': reward.icono,
+                    'description': reward.descripcion
+                } 
+                for reward in new_rewards
+            ]
+    
+    return JsonResponse(result)
+
+
+@login_required
+def abandon_challenge(request, user_challenge_id):
+    if request.method == 'POST':
+        ChallengeService.abandon(user_challenge_id, request.user)
+        messages.warning(request, 'Has abandonado el reto')
+    
+    return redirect('challenge_list')
