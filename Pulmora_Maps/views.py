@@ -121,7 +121,8 @@ def community(request):
         
     success_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-created_at')
     popular_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-num_likes', '-created_at')
-
+    
+    challenges = ChallengeService.get_active()
     VISIBLE_STORIES_LIMIT = 3
 
     show_carousel = popular_stories.count() > VISIBLE_STORIES_LIMIT
@@ -139,7 +140,8 @@ def community(request):
 
         'success_stories': success_stories,
         'popular_stories': popular_stories,
-        'show_carousel': show_carousel
+        'show_carousel': show_carousel,
+        'challenges': challenges
     }
     return render(request, 'pulmora/community.html', context)
 

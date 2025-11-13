@@ -21,6 +21,71 @@
             <p>Únete a miles de personas que ya están tomando acción por el planeta. Comparte, aprende y crece junto a nuestra comunidad.</p>
         </header>
        
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number stat-green">4</div>
+                    <div class="stat-label">Miembros Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-blue">2</div>
+                    <div class="stat-label">Retos Completados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-orange">5</div>
+                    <div class="stat-label">Historias Publicadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number stat-purple">191</div>
+                    <div class="stat-label">Países Representados</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="challenges-section">
+            <h2 class="section-title">🎯 Retos Activos</h2>
+            <div class="carousel-container">
+                <button id="prev-challenge" class="carousel-btn prev"></button>
+                
+                <div class="challenges-grid-js">
+                    {% for challenge in challenges %}
+                    <div class="challenge-card">
+                        <div class="challenge-icon-wrapper {% if forloop.counter == 2 %}blue-gradient{% elif forloop.counter == 3 %}orange-gradient{% endif %}">
+                            <span class="challenge-icon">{{ challenge.icono }}</span>
+                        </div>
+                        
+                        <div class="challenge-content">
+                            <h3 class="challenge-title">{{ challenge.titulo }}</h3>
+                            <p class="challenge-participants">👥 2,847 participantes</p>
+                            <p class="challenge-description">{{ challenge.descripcion }}</p>
+                            
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%;"></div>
+                                </div>
+                                <span class="progress-percentage">75%</span>
+                            </div>
+                            
+                            {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'join_challenge' challenge.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="goal" value="10">
+                                    <button type="submit" class="btn-join">Unirse</button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="btn-join">Unirse</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="empty-message">No hay retos disponibles en este momento.</p>
+                    {% endfor %}
+                </div>
+
+                <button id="next-challenge" class="carousel-btn next"></button>
+            </div>
+        </section>
+
         <section class="success-stories">
             <h2 class="section-title">💖 Historias de Éxito</h2>
             <div class="carousel-container">
