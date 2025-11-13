@@ -444,53 +444,183 @@ body {
     font-size: 14px;
 }
 
-.main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 70px); 
-    padding: 20px;
+.stats-section {
+    margin-bottom: 60px;
 }
 
-.construccion {
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
 }
 
-.construccion h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #374151;
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
     margin-bottom: 8px;
 }
 
-.construccion .subtitle {
-    font-size: 1rem;
-    color: #6b7280;
-}
-.construccion img {
-    margin-top: 25px;
-    max-width: 400px;
+.stat-number.stat-green { color: #4caf50; }
+.stat-number.stat-blue { color: #2196f3; }
+.stat-number.stat-orange { color: #ff9800; }
+.stat-number.stat-purple { color: #9c27b0; }
+
+.stat-label {
+    color: #666;
+    font-size: 0.95em;
 }
 
-.like-btn {
-    background-color: #f0f0f0;
-    color: #555;
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 13px;
+/* ===== SECCIÓN DE RETOS ===== */
+.challenges-section {
+    margin-bottom: 80px;
+}
+
+.challenges-grid-js {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+    max-width: 1050px;
+}
+
+.challenge-card {
+    background: white;
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid #4caf50;
+    display: flex;
+    flex-direction: column;
+}
+
+.challenge-card:nth-child(2) {
+    border-left-color: #2196f3;
+}
+
+.challenge-card:nth-child(3) {
+    border-left-color: #ff9800;
+}
+
+.challenge-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.challenge-icon-wrapper {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+}
+
+.challenge-icon-wrapper.blue-gradient {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+}
+
+.challenge-icon-wrapper.orange-gradient {
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+}
+
+.challenge-icon {
+    font-size: 3em;
+}
+
+.challenge-content {
+    padding: 20px;
+}
+
+.challenge-title {
+    font-size: 1.2em;
     font-weight: 600;
-    transition: all 0.2s ease;
+    color: #333;
+    margin-bottom: 8px;
 }
 
-.like-btn:hover {
-    background-color: #e0e0e0;
+.challenge-participants {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 12px;
 }
 
-.like-btn.liked {
-    background-color: #059669;
+.challenge-description {
+    color: #555;
+    font-size: 0.95em;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+/* Barra de progreso */
+.progress-container {
+    margin: 15px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+
+.challenge-card:nth-child(2) .progress-fill {
+    background: linear-gradient(90deg, #2196f3 0%, #42a5f5 100%);
+}
+
+.challenge-card:nth-child(3) .progress-fill {
+    background: linear-gradient(90deg, #ff9800 0%, #ffa726 100%);
+}
+
+.progress-percentage {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-join {
+    width: 100%;
+    padding: 12px;
+    background: #4caf50;
     color: white;
-    border-color: #047857;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-join:hover {
+    background: #45a049;
+    transform: scale(1.02);
 }

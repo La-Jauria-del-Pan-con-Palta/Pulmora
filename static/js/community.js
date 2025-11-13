@@ -1,71 +1,80 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Community script loaded.");
 
-    const carouselContainer = document.querySelector('.carousel-container');
-    if (!carouselContainer) {
-        console.log("Carousel container not found. Exiting.");
-        return;
-    }
-    console.log("Carousel container found.");
+    function initCarousel(config) {
+        const { gridSelector, prevBtnId, nextBtnId, itemsToShow = 3 } = config;
+        
+        const grid = document.querySelector(gridSelector);
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+        
+        if (!grid || !prevBtn || !nextBtn) {
+            console.error(`Carousel elements not found for ${gridSelector}`);
+            return;
+        }
 
-    const prevBtn = document.getElementById('prev-story');
-    const nextBtn = document.getElementById('next-story');
-    const grid = document.querySelector('.stories-grid-js');
-    
-    if (!grid || !prevBtn || !nextBtn) {
-        console.error("A required carousel element (grid, prev, or next button) is missing.");
-        return;
-    }
+        const allItems = Array.from(grid.children);
+        console.log(`Found ${allItems.length} items for ${gridSelector}`);
 
-    const allStories = Array.from(grid.querySelectorAll('.story-card'));
-    console.log(`Found ${allStories.length} story cards.`);
+        if (allItems.length === 0) {
+            console.log(`No items found. Hiding buttons for ${gridSelector}`);
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+            return;
+        }
 
-    if (allStories.length === 0) {
-        console.log("No stories found. Hiding buttons.");
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-        return;
-    }
+        let currentIndex = 0;
 
-    const storiesToShow = 3;
-    let currentIndex = 0;
+        function updateCarousel() {
+            console.log(`Updating ${gridSelector}. Current index: ${currentIndex}`);
 
-    function updateCarousel() {
-        console.log(`Updating carousel. Current index: ${currentIndex}`);
+            allItems.forEach((item, index) => {
+                if (index >= currentIndex && index < currentIndex + itemsToShow) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
 
-        // Mostrar/ocultar tarjetas
-        allStories.forEach((card, index) => {
-            if (index >= currentIndex && index < currentIndex + storiesToShow) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
+            const showPrev = currentIndex > 0;
+            const showNext = currentIndex + itemsToShow < allItems.length;
+
+            prevBtn.style.display = showPrev ? 'flex' : 'none';
+            nextBtn.style.display = showNext ? 'flex' : 'none';
+        }
+
+        nextBtn.addEventListener('click', () => {
+            console.log(`Next button clicked for ${gridSelector}`);
+            if (currentIndex + itemsToShow < allItems.length) {
+                currentIndex++;
+                updateCarousel();
             }
         });
 
-        const showPrev = currentIndex > 0;
-        const showNext = currentIndex + storiesToShow < allStories.length;
+        prevBtn.addEventListener('click', () => {
+            console.log(`Prev button clicked for ${gridSelector}`);
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
 
-        console.log(`Show Prev: ${showPrev}, Show Next: ${showNext}`);
-        prevBtn.style.display = showPrev ? 'flex' : 'none';
-        nextBtn.style.display = showNext ? 'flex' : 'none';
+        updateCarousel();
     }
 
-    nextBtn.addEventListener('click', () => {
-        console.log("Next button clicked.");
-        if (currentIndex + storiesToShow < allStories.length) {
-            currentIndex++;
-            updateCarousel();
-        }
+    initCarousel({
+        gridSelector: '.challenges-grid-js',
+        prevBtnId: 'prev-challenge',
+        nextBtnId: 'next-challenge',
+        itemsToShow: 3
     });
 
-    prevBtn.addEventListener('click', () => {
-        console.log("Prev button clicked.");
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-        }
+    initCarousel({
+        gridSelector: '.stories-grid-js',
+        prevBtnId: 'prev-story',
+        nextBtnId: 'next-story',
+        itemsToShow: 3
     });
 
-    console.log("Initial carousel update.");
-    updateCarousel(); 
+    console.log("Both carousels initialized.");
 });
