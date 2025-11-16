@@ -7,24 +7,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/education.css' %}">
-    <title>Educación</title>
+    <title>Educación - Pulmora</title>
 </head>
 <body>
     {% include 'pulmora/partials/header.html' %}
     {% include 'pulmora/partials/pulmorin.html' %}
     {% include 'pulmora/partials/breadcrumb.html' %}
-    <div class="main-container">
-        <div class="pages-container">
-        </div>
-        <div class="videos-carousel">
-        </div>
-        <div class="papers">
-        </div>
-        <div class="construccion">
-            <h2>Disculpen, pagina aún en construcción</h2>
-            <p class="subtitle">Tengan esta bocchi girando por mientras</p>
-            <a href="https://www.tiktok.com/@anya_y_bocchi1/video/7557473049725963531?q=bocchi%20bailando&t=1761284114106"><img src="{% static 'img/bocchi-spin.gif' %}"></a>
-        </div>
+    
+    <div class="education-container">
+        <!-- Hero Header -->
+        <header class="education-header">
+            <h1>
+                <img src="{% static 'img/hojita.png' %}" alt="Icono de hoja">
+                Centro de Educación Ambiental
+            </h1>
+            <p>Aprende sobre el cambio climático, sostenibilidad y cómo puedes hacer la diferencia.</p>
+        </header>
+
+        <section class="papers-section">
+            <h2 class="section-title">📄 Papers y Artículos Científicos</h2>
+            <div class="carousel-container">
+                <button id="prev-paper" class="carousel-btn prev"></button>
+                
+                <div class="papers-grid">
+                    <!-- Paper 1 -->
+                    <div class="paper-card">
+                        <div class="paper-image">
+                            <img src="{% static 'img/paper1.jpg' %}" alt="Portada paper 1">
+                        </div>
+                        <div class="paper-content">
+                            <h3 class="paper-title">Climate Change 2023: Synthesis Report</h3>
+                            <p class="paper-author">IPCC - Intergovernmental Panel on Climate Change</p>
+                            <p class="paper-description">Informe de síntesis del Sexto Informe de Evaluación del IPCC sobre el estado actual del cambio climático.</p>
+                            <a href="https://www.ipcc.ch/report/ar6/syr/" target="_blank" class="btn-read">Leer Paper</a>
+                        </div>
+                    </div>
+
+                    <!-- Paper 2 -->
+                    <div class="paper-card">
+                        <div class="paper-image">
+                            <img src="{% static 'img/paper2.png' %}" alt="Portada paper 2">
+                        </div>
+                        <div class="paper-content">
+                            <h3 class="paper-title">The Economics of Biodiversity</h3>
+                            <p class="paper-author">Partha Dasgupta - Cambridge University</p>
+                            <p class="paper-description">Análisis económico sobre la importancia de la biodiversidad para el desarrollo sostenible.</p>
+                            <a href="https://www.gov.uk/government/publications/final-report-the-economics-of-biodiversity-the-dasgupta-review" target="_blank" class="btn-read">Leer Paper</a>
+                        </div>
+                    </div>
+
+                    <!-- Paper 3 -->
+                    <div class="paper-card">
+                        <div class="paper-image">
+                            <img src="{% static 'img/paper3.png' %}" alt="Portada paper 3">
+                        </div>
+                        <div class="paper-content">
+                            <h3 class="paper-title">Detecting Greenhouse-Gas-Induced Climate Change with an Optimal Fingerprint Method.</h3>
+                            <p class="paper-author">Hegerl, G. C., Hasselmann, K., Cubasch, U., Santer, B. D., et al. (1996). Detecting greenhouse-gas-induced climate change with an optimal fingerprint method. Journal of Climate, 9(10), 2281–2306.</p>
+                            <p class="paper-description">Uso del método estadístico (“fingerprint”) para detectar la huella humana del cambio climático en los datos de temperatura observados.</p>
+                            <a href="https://journals.ametsoc.org/view/journals/clim/9/10/1520-0442_1996_009_2281_dggicc_2_0_co_2.xml" target="_blank" class="btn-read">Leer Paper</a>
+                        </div>
+                    </div>
+
+                    <!-- Paper 4 -->
+                    <div class="paper-card">
+                        <div class="paper-image">
+                            <img src="{% static 'img/paper4.png' %}" alt="Portada paper 4">
+                        </div>
+                        <div class="paper-content">
+                            <h3 class="paper-title">Detection and attribution of anthropogenic climate change impacts.</h3>
+                            <p class="paper-author">Rosenzweig, C., & Neofotis, P. (2013). Detection and attribution of anthropogenic climate change impacts. NASA Technical Paper.</p>
+                            <p class="paper-description">Evidencia de cómo los cambios climáticos observados a están afectando sistemas biológicos y físicos en todo el mundo.</p>
+                            <a href="ntrs.nasa.gov/api/citations/20140013041/downloads/20140013041.pdf" target="_blank" class="btn-read">Leer Paper</a>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="next-paper" class="carousel-btn next"></button>
+            </div>
+        </section>
+
+        <section class="videos-section">
+            <h2 class="section-title">🎥 Videos Educativos</h2>
+            <div class="carousel-container">
+                <button id="prev-video" class="carousel-btn prev"></button>
+                
+                <div class="videos-grid">
+                    <!-- Video 1 -->
+                    <div class="video-card" data-video-id="kcr-Ryq6Nrk">
+                        <div class="video-thumbnail" onclick="playVideo(this)">
+                            <img src="https://img.youtube.com/vi/kcr-Ryq6Nrk/maxresdefault.jpg" alt="El cambio climático para niños - ¿Qué es?">
+                            <div class="play-button">
+                                <svg width="68" height="48" viewBox="0 0 68 48">
+                                    <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                                    <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="video-info">     
+                            <h3>El cambio climático para niños - ¿Qué es?</h3>
+                            <p>Una explicación clara sobre las causas y efectos del cambio climático global.</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 2 -->
+                    <div class="video-card" data-video-id="H5CCFhqxv_g">
+                        <div class="video-thumbnail" onclick="playVideo(this)">
+                            <img src="https://img.youtube.com/vi/H5CCFhqxv_g/maxresdefault.jpg" alt="Acción por el clima ☀️ ODS 13 🌡️ Objetivos de desarrollo sostenible para niños">
+                            <div class="play-button">
+                                <svg width="68" height="48" viewBox="0 0 68 48">
+                                    <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                                    <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>Acción por el clima ☀️ ODS 13 🌡️ Objetivos de desarrollo sostenible para niños</h3>
+                            <p>Vídeo educativo para niños en el que aprenderán sobre el treceavo de los Objetivos de desarrollo Sostenible (ODS).</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 3 -->
+                    <div class="video-card" data-video-id="G4H1N_yXBiA">
+                        <div class="video-thumbnail" onclick="playVideo(this)">
+                            <img src="https://img.youtube.com/vi/G4H1N_yXBiA/maxresdefault.jpg" alt="El ciclo del carbono">
+                            <div class="play-button">
+                                <svg width="68" height="48" viewBox="0 0 68 48">
+                                    <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                                    <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>El ciclo del carbono explicado</h3>
+                            <p>Cómo funciona el ciclo del carbono y por qué es crucial para el clima.</p>
+                        </div>
+                    </div>
+
+                    <!-- Video 4 -->
+                    <div class="video-card" data-video-id="wNQ5wvGmnEk">
+                        <div class="video-thumbnail" onclick="playVideo(this)">
+                            <img src="https://img.youtube.com/vi/wNQ5wvGmnEk/maxresdefault.jpg" alt="26 Formas de Luchar contra el Cambio Climático">
+                            <div class="play-button">
+                                <svg width="68" height="48" viewBox="0 0 68 48">
+                                    <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                                    <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>26 Formas de Luchar contra el Cambio Climático</h3>
+                            <p>Conoce diferentes formas para disminuir tu huella de carbono.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="next-video" class="carousel-btn next"></button>
+            </div>
+        </section>
+
+        <section class="links-section">
+            <h2 class="section-title">🔗 Recursos y Enlaces Útiles</h2>
+            <div class="carousel-container">
+                <button id="prev-link" class="carousel-btn prev"></button>
+                
+                <div class="links-grid">
+                    <a href="https://www.un.org/sustainabledevelopment/es" target="_blank" class="link-card">
+                        <div class="link-icon">🌍</div>
+                        <h3 class="link-title">ONU - Objetivos de Desarrollo Sostenible</h3>
+                        <p class="link-description">Portal oficial de la ONU sobre los 17 objetivos para transformar nuestro mundo hacia la sostenibilidad.</p>
+                        <span class="link-url">un.org/sustainabledevelopment/es</span>
+                    </a>
+
+                    <a href="https://www.ipcc.ch/languages-2/spanish" target="_blank" class="link-card">
+                        <div class="link-icon">📊</div>
+                        <h3 class="link-title">IPCC - Panel Intergubernamental</h3>
+                        <p class="link-description">Informes científicos sobre el cambio climático, sus impactos y opciones de adaptación y mitigación.</p>
+                        <span class="link-url">ipcc.ch</span>
+                    </a>
+
+                    <a href="https://www.worldwildlife.org/" target="_blank" class="link-card">
+                        <div class="link-icon">🐼</div>
+                        <h3 class="link-title">WWF - Fondo Mundial para la Naturaleza</h3>
+                        <p class="link-description">Organización líder en conservación de la naturaleza y reducción de amenazas para la biodiversidad.</p>
+                        <span class="link-url">worldwildlife.org</span>
+                    </a>
+
+                    <a href="https://ciencia.nasa.gov/cambio-climatico" target="_blank" class="link-card">
+                        <div class="link-icon">🛰️</div>
+                        <h3 class="link-title">NASA - Cambio Climático</h3>
+                        <p class="link-description">Datos satelitales, investigaciones y evidencia científica sobre el cambio climático global de la NASA.</p>
+                        <span class="link-url">ciencia.nasa.gov/cambio-climatico</span>
+                    </a>
+
+                    <a href="https://www.greenpeace.org/" target="_blank" class="link-card">
+                        <div class="link-icon">⚓</div>
+                        <h3 class="link-title">Greenpeace Internacional</h3>
+                        <p class="link-description">Campañas globales para proteger el medio ambiente y promover la paz en un planeta verde y justo.</p>
+                        <span class="link-url">greenpeace.org</span>
+                    </a>
+
+                    <a href="https://www.nationalgeographic.com/environment" target="_blank" class="link-card">
+                        <div class="link-icon">📰</div>
+                        <h3 class="link-title">National Geographic - Medio Ambiente</h3>
+                        <p class="link-description">Artículos, fotografías y documentales sobre naturaleza, conservación y cambio climático.</p>
+                        <span class="link-url">nationalgeographic.com/environment</span>
+                    </a>
+                </div>
+
+                <button id="next-link" class="carousel-btn next"></button>
+            </div>
+        </section>
     </div>
+
+    <script src="{% static 'js/education.js' %}"></script>
 </body>
 </html>
