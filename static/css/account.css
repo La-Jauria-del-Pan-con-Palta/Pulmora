@@ -11,9 +11,6 @@ body {
     min-height: 100vh;
 }
 
-/* ===================================
-   HEADER - ESTANDARIZADO
-   =================================== */
 .header {
     background-color: #ffffff;
     padding: 15px 0;
@@ -107,9 +104,6 @@ body {
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
 }
 
-/* ===================================
-   PROFILE CONTAINER
-   =================================== */
 .container {
     max-width: 1200px;
     margin: 0 auto;

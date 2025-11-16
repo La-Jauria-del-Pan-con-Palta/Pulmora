@@ -12,9 +12,6 @@ body {
     line-height: 1.6;
 }
 
-/* ===================================
-   HEADER - ESTANDARIZADO
-   =================================== */
 .header {
     background-color: #ffffff;
     padding: 15px 0;
@@ -105,9 +102,6 @@ body {
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
 }
 
-/* ===================================
-   PROFILE EDIT FORM
-   =================================== */
 .profile-container {
     max-width: 900px;
     margin: 30px auto;

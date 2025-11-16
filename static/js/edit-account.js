@@ -1,37 +1,32 @@
 let selectedEmoji = '🙂';
 let uploadedImage = null;
-let currentAvatar = null; // Guardar el avatar actual
+let currentAvatar = null;
 
-// Cargar datos existentes del perfil al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
     cargarDatosExistentes();
 });
 
 function cargarDatosExistentes() {
-    // Detectar si hay una imagen o emoji cargado
     const avatarPreview = document.getElementById('avatarPreview');
     const avatarEmoji = document.getElementById('avatarEmoji');
-    
-    // Si hay una imagen en el avatar
+
     const imgElement = avatarEmoji.querySelector('img');
     if (imgElement) {
         uploadedImage = imgElement.src;
-        currentAvatar = imgElement.src; // Guardar como avatar actual
+        currentAvatar = imgElement.src;
     } else {
-        // Es un emoji
         const emojiText = avatarEmoji.textContent.trim();
         selectedEmoji = emojiText || '🙂';
-        currentAvatar = emojiText || '🙂'; // Guardar como avatar actual
+        currentAvatar = emojiText || '🙂';
     }
 }
 
 function selectEmoji(emoji) {
     selectedEmoji = emoji;
-    uploadedImage = null; // Limpiar imagen subida porque ahora usamos emoji
+    uploadedImage = null;
     document.getElementById('avatarEmoji').textContent = emoji;
     document.getElementById('previewAvatar').textContent = emoji;
 
-    // Update selected state
     document.querySelectorAll('.emoji-option').forEach(opt => {
         opt.classList.remove('selected');
         if (opt.dataset.emoji === emoji) {
@@ -63,7 +58,6 @@ function previewProfile() {
     document.getElementById('previewBio').textContent = `${paisEmoji} ${bio}`;
     document.getElementById('previewObjetivo').textContent = objetivo;
 
-    // Actualizar avatar en preview
     const previewAvatar = document.getElementById('previewAvatar');
     if (uploadedImage) {
         previewAvatar.innerHTML = `<img src="${uploadedImage}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
@@ -93,20 +87,14 @@ function getCookie(name) {
 document.getElementById('profileForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Determinar qué avatar usar
     let avatarToSave;
     if (uploadedImage) {
-        // Si hay una imagen subida en esta sesión, usarla
         avatarToSave = uploadedImage;
     } else if (selectedEmoji !== currentAvatar && selectedEmoji !== '🙂') {
-        // Si seleccionó un emoji diferente al actual, usarlo
         avatarToSave = selectedEmoji;
     } else {
-        // Mantener el avatar actual (imagen o emoji)
         avatarToSave = currentAvatar;
     }
-
-    // Recopilar datos del formulario
     const formData = {
         avatar: avatarToSave,
         bio: document.getElementById('bio').value,
@@ -114,7 +102,6 @@ document.getElementById('profileForm').addEventListener('submit', function (e) {
         objetivo: document.getElementById('objetivo').value
     };
 
-    // Solo incluir username y email si fueron modificados
     const username = document.getElementById('username').value.trim();
     const email = document.getElementById('email').value.trim();
     
@@ -126,10 +113,8 @@ document.getElementById('profileForm').addEventListener('submit', function (e) {
         formData.email = email;
     }
 
-    // Obtener el token CSRF
     const csrftoken = getCookie('csrftoken');
 
-    // Enviar datos al servidor Django
     fetch('/update_profile/', {
         method: 'POST',
         headers: {
@@ -141,14 +126,12 @@ document.getElementById('profileForm').addEventListener('submit', function (e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Mostrar mensaje de éxito
             const successMsg = document.getElementById('successMessage');
             successMsg.style.display = 'block';
             successMsg.scrollIntoView({ behavior: 'smooth' });
 
             setTimeout(() => {
                 successMsg.style.display = 'none';
-                // Redirigir a la página de perfil
                 window.location.href = '/account/';
             }, 2000);
         } else {
