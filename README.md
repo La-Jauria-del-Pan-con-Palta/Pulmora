@@ -10,4 +10,4 @@
 >Para que puedan conectar su carpeta del proyecto en 1ro deben de crear una nueva branch aquí en el repositorio y en la terminal dentro del proyecto ejecutar el comando `git checkout -b nombre_de_la_branch`
 
 >[!WARNING]
->Si quieren cambiar algo que no les parece de estos archivos, suban dicho commit en sus ramas personales, para evitar cualquier tipo de incopatibilidad con lo que se mantenga
+>Si quieren cambiar algo que no les parece de estos archivos, suban dicho commit en sus ramas personales, para evitar cualquier tipo de incopatibilidad con lo que se mantenga.
