@@ -39,6 +39,7 @@ Pulmora es una comunidad web, enfocada en la concientización del cambio climati
 - pip (gestor de paquetes de Python)
 - Django 3.x o 4.x
 - Cuenta de Google Cloud con acceso a Gemini API
+- Cuenta de OpenWheater con acceso a la API
 - Git
 
 ## 📦 Instalación
