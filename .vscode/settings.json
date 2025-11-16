@@ -1,20 +1,39 @@
 {
-    "files.associations": {
-        "**/templates/**/*.html": "django-html",
-        "**/templates/**": "django-html"
-    },
-    "emmet.includeLanguages": {
-        "django-html": "html"
-    },
-    "djlint.lintOnSave": false,
-    "html.validate.scripts": false,
-    "html.validate.styles": false,
-    "[django-html]": {
-        "editor.quickSuggestions": {
-            "other": true,
-            "comments": false,
-            "strings": true
-        },
-        "editor.formatOnSave": false
+  // Desactivar validación de CSS en archivos HTML (Django templates)
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  
+  // Desactivar validación de HTML para templates de Django
+  "html.validate.scripts": false,
+  "html.validate.styles": false,
+  
+  // Configuración para Django templates
+  "emmet.includeLanguages": {
+    "django-html": "html"
+  },
+  
+  // Configurar asociaciones de archivos
+  "files.associations": {
+    "*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**": "django-html"
+  },
+  
+  // Desactivar errores de sintaxis en templates de Django
+  "[django-html]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
     }
+  },
+  
+  // Ignorar problemas de JavaScript en templates
+  "javascript.validate.enable": true,
+  
+  // Si usas Pylint o similar para Python
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": false
 }

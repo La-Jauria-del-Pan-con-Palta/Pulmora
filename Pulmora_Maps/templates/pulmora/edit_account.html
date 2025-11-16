@@ -1,0 +1,132 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/edit_account.css' %}">
+    <title>Editar Perfil - Pulmora</title>
+</head>
+
+<body>
+    {% include 'pulmora/partials/header.html' %}
+
+    <div class="profile-container">
+        <div id="successMessage" class="success-message">
+            ✓ Perfil guardado exitosamente
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">✏️ Editar Mi Perfil</h2>
+
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Nombre de usuario</label>
+                        <input type="text" id="username" placeholder="{{ user.username }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="avatar-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <span id="avatarEmoji">
+                            {% if profile.avatar %}
+                                {% if 'data:image' in profile.avatar %}
+                                    <img src="{{ profile.avatar }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                {% else %}
+                                    {{ profile.avatar }}
+                                {% endif %}
+                            {% else %}
+                                🙂
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        <label>Elige tu avatar</label>
+                        <div class="emoji-picker">
+                            <div class="emoji-option {% if profile.avatar == '🙂' or not profile.avatar %}selected{% endif %}" data-emoji="🙂" onclick="selectEmoji('🙂')">🙂</div>
+                            <div class="emoji-option {% if profile.avatar == '😊' %}selected{% endif %}" data-emoji="😊" onclick="selectEmoji('😊')">😊</div>
+                            <div class="emoji-option {% if profile.avatar == '🐻' %}selected{% endif %}" data-emoji="🐻" onclick="selectEmoji('🐻')">🐻</div>
+                            <div class="emoji-option {% if profile.avatar == '🦊' %}selected{% endif %}" data-emoji="🦊" onclick="selectEmoji('🦊')">🦊</div>
+                            <div class="emoji-option {% if profile.avatar == '🐼' %}selected{% endif %}" data-emoji="🐼" onclick="selectEmoji('🐼')">🐼</div>
+                            <div class="emoji-option {% if profile.avatar == '🌱' %}selected{% endif %}" data-emoji="🌱" onclick="selectEmoji('🌱')">🌱</div>
+                            <div class="emoji-option {% if profile.avatar == '🌳' %}selected{% endif %}" data-emoji="🌳" onclick="selectEmoji('🌳')">🌳</div>
+                            <div class="emoji-option {% if profile.avatar == '🌻' %}selected{% endif %}" data-emoji="🌻" onclick="selectEmoji('🌻')">🌻</div>
+                        </div>
+                        <p class="info-text">O sube tu propia imagen</p>
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;"
+                            onchange="handleImageUpload(event)">
+                        <button type="button" class="avatar-upload-btn"
+                            onclick="document.getElementById('avatarUpload').click()">
+                            📤 Subir imagen
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pais">País 🌍</label>
+                    <select id="pais">
+                        <option value="">Selecciona tu país</option>
+                        <option value="MX" {% if profile.pais == 'MX' %}selected{% endif %}>🇲🇽 México</option>
+                        <option value="ES" {% if profile.pais == 'ES' %}selected{% endif %}>🇪🇸 España</option>
+                        <option value="AR" {% if profile.pais == 'AR' %}selected{% endif %}>🇦🇷 Argentina</option>
+                        <option value="CO" {% if profile.pais == 'CO' %}selected{% endif %}>🇨🇴 Colombia</option>
+                        <option value="CL" {% if profile.pais == 'CL' %}selected{% endif %}>🇨🇱 Chile</option>
+                        <option value="PE" {% if profile.pais == 'PE' %}selected{% endif %}>🇵🇪 Perú</option>
+                        <option value="US" {% if profile.pais == 'US' %}selected{% endif %}>🇺🇸 Estados Unidos</option>
+                        <option value="otro" {% if profile.pais == 'otro' %}selected{% endif %}>🌎 Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Biografía</label>
+                    <textarea id="bio" placeholder="Cuéntanos sobre ti y tu compromiso con el medio ambiente...">{{ profile.bio|default:'' }}</textarea>
+                    <p class="info-text">Ej: Aficionada a la naturaleza y el senderismo ✅</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo">Mi objetivo ambiental</label>
+                    <textarea id="objetivo" placeholder="¿Qué quieres lograr?">{{ profile.objetivo|default:'' }}</textarea>
+                    <p class="info-text">Ej: Trabajando para reducir mi huella</p>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">💾 Guardar Cambios</button>
+                    <a href="{% url 'account' %}" class="btn btn-secondary">❌ Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="card" id="previewCard" style="display: none;">
+            <h2 class="card-title">👀 Vista Previa de tu Perfil</h2>
+            <div class="preview-section">
+                <div class="preview-header">
+                    <div class="preview-avatar" id="previewAvatar">
+                        {{ profile.avatar|default:'🙂' }}
+                    </div>
+                    <div class="preview-info">
+                        <h3 id="previewNombre">{{ user.username }}</h3>
+                        <div class="preview-bio" id="previewBio">
+                            {% if profile.pais %}{{ profile.pais }}{% endif %} 
+                            {{ profile.bio|default:'Tu biografía aparecerá aquí' }}
+                        </div>
+                        <div class="preview-bio" id="previewObjetivo" style="margin-top: 5px;">
+                            {{ profile.objetivo|default:'Tu objetivo aparecerá aquí' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/edit-account.js' %}"></script>
+</body>
+
+</html>

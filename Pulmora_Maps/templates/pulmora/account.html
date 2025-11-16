@@ -7,28 +7,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/account.css' %}">
-    <title>Mi cuenta</title>
+    <title>Perfil - Pulmora</title>
 </head>
 <body>
     {% include 'pulmora/partials/header.html' %}
-    <div class="main-container">
-        
-        <div class="construccion">
-            <h2>Disculpen, pagina aún en construcción</h2>
-            <p class="subtitle">Tengan esta bocchi girando por mientras</p>
-            <a href="https://www.tiktok.com/@anya_y_bocchi1/video/7557473049725963531?q=bocchi%20bailando&t=1761284114106"><img src="{% static 'img/bocchi-spin.gif' %}"></a>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">
+                {% if profile.avatar %}
+                    {% if 'data:image' in profile.avatar %}
+                        <img src="{{ profile.avatar }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    {% else %}
+                        {{ profile.avatar }}
+                    {% endif %}
+                {% else %}
+                    {{ user.username.0|upper }}
+                {% endif %}
+            </div>
+            
+            <div class="profile-info">
+                <h1 class="profile-name" id="profileName">{{ user.username }}</h1>
+                <div class="profile-bio" id="profileBio">
+                    {% if profile.pais %}
+                        <span id="paisEmoji">{{ profile.pais }}</span>
+                    {% endif %}
+                    {{ profile.bio|default:"" }}
+                </div>
+                <div class="profile-status" id="profileStatus">{{ profile.objetivo|default:"" }}</div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-follow" onclick="window.location.href='{% url 'community' %}'">Ver comunidad</button>
+                    <button class="btn btn-message" onclick="window.location.href='{% url 'edit_account' %}'">Editar perfil</button>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="challenges-stat" id="retosTotal">
+                    {{ completed_count }} reto{% if completed_count != 1 %}s{% endif %} completado{% if completed_count != 1 %}s{% endif %}
+                </div>
+                <div class="challenges-stat" style="font-size: 16px; margin-top: 10px;">
+                    {{ stats.total_active }} reto{% if stats.total_active != 1 %}s{% endif %} activo{% if stats.total_active != 1 %}s{% endif %}
+                </div>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="logout">Cerrar sesión</button>
+                </form>
+            </div>
         </div>
 
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="logout">Cerrar sesión</button>
-        </form>
+        <div class="content-grid">
+            <div class="card">
+                <h2 class="card-title">🏆 Medallas y Logros</h2>
+                
+                {% if user_rewards %}
+                    {% for user_reward in user_rewards %}
+                    <div class="challenge-item">
+                        <div class="challenge-icon" style="background: {{ user_reward.recompensa.color }};">
+                            {{ user_reward.recompensa.icono }}
+                        </div>
+                        <div class="challenge-info">
+                            <div class="challenge-name">{{ user_reward.recompensa.nombre }}</div>
+                            <div class="progress-text">Obtenida el {{ user_reward.fecha_obtenida|date:"d/m/Y" }}</div>
+                            <div class="progress-text" style="color: #b8d4b8;">{{ user_reward.recompensa.descripcion }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #b8d4b8; text-align: center; padding: 20px;">
+                        Completa retos para desbloquear medallas 🏅
+                    </p>
+                {% endif %}
 
+                {% if next_reward_progress %}
+                <div style="margin-top: 20px; padding: 15px; background: #2a3d2a; border-radius: 10px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">🎯 Próxima medalla</h3>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <span style="font-size: 24px;">{{ next_reward_progress.reward.icono }}</span>
+                        <div>
+                            <div style="font-weight: 600;">{{ next_reward_progress.reward.nombre }}</div>
+                            <div style="font-size: 13px; color: #90CAF9;">
+                                {{ next_reward_progress.current_progress }}/{{ next_reward_progress.required_progress }} retos
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ next_reward_progress.percentage }}%;"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">🎯 Retos Completados</h2>
+                
+                {% if completed_challenges %}
+                    {% for user_challenge in completed_challenges %}
+                    <div class="challenge-item">
+                        <div class="challenge-icon" style="background: #4CAF50;">
+                            {{ user_challenge.reto.icono }}
+                        </div>
+                        <div class="challenge-info">
+                            <div class="challenge-name">{{ user_challenge.reto.titulo }}</div>
+                            <div class="progress-text">✅ Completado el {{ user_challenge.fecha_completado|date:"d/m/Y" }}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #b8d4b8; text-align: center; padding: 20px;">
+                        Aún no has completado ningún reto. ¡Únete a uno desde la comunidad! 🌱
+                    </p>
+                {% endif %}
+
+                {% if stats.total_active > 0 %}
+                <div class="view-all" onclick="window.location.href='{% url 'community' %}'">
+                    Ver retos activos ({{ stats.total_active }})
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="content-grid" style="margin-top: 30px;">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2 class="card-title">💚 Mis Historias</h2>
+                
+                {% if user_stories %}
+                    {% for story in user_stories %}
+                    <div class="activity-item">
+                        <div class="activity-header">
+                            <div class="activity-avatar">
+                                {% if profile.avatar %}
+                                    {% if 'data:image' in profile.avatar %}
+                                        <img src="{{ profile.avatar }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ profile.avatar }}
+                                    {% endif %}
+                                {% else %}
+                                    {{ user.username.0|upper }}
+                                {% endif %}
+                            </div>
+                            <div class="activity-meta">
+                                <div class="activity-type">{{ story.title }}</div>
+                                <div class="activity-date">Publicado el {{ story.created_at|date:"d/m/Y" }}</div>
+                            </div>
+                        </div>
+                        <div class="activity-content">
+                            {{ story.content|truncatewords:50 }}
+                        </div>
+                        <div class="activity-stats">
+                            <div class="activity-stat">❤️ {{ story.total_likes }}</div>
+                            <div class="activity-stat">💬 {{ story.comments.count }}</div>
+                            <a href="{% url 'post_detail' story.id %}" style="color: #4CAF50; text-decoration: none; margin-left: auto;">
+                                Ver completo →
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: #b8d4b8; text-align: center; padding: 20px;">
+                        Aún no has compartido ninguna historia. ¡Comparte tu experiencia en la comunidad! 📝
+                    </p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
+    <script src="{% static 'js/account.js' %}"></script>
 </body>
 </html>
-
-<!--Datos del usuario de prueba-->
-<!--Tatsuohi-->
-<!--Z96Zb6JZWrubWSu-->

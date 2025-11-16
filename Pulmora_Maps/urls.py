@@ -15,7 +15,9 @@ urlpatterns = [
     path('post/<int:post_id>/', views.post_details, name='post_detail'),
     path('data/', views.data, name="data"),
     path('education/', views.education, name="education"),
-
+    path('edit_account', views.edit_account, name="edit_account"),
+    path('update_profile/', views.update_profile, name="update_profile"),
+    
     # Challenge system URLs
     path('challenges/', views.challenge_list, name='challenge_list'),
     path('challenges/join/<int:challenge_id>/', views.join_challenge, name='join_challenge'),

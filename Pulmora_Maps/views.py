@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.db.models import Count
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm 
-from .models import Post, Comment
+from .models import Post, Comment, UserProfile
 from .retos import ChallengeService, RewardService, calculate_user_stats
 from . import apis, history
 import json
@@ -82,7 +82,10 @@ def chatbox(request):
 # Render the user account, only if their have an account in the db
 @login_required
 def account(request):
+    
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
     active_challenges = ChallengeService.active_for_user(request.user)
+    completed_challenges = ChallengeService.completed_for_user(request.user)
     completed_count = ChallengeService.count_completed(request.user)
     
     user_rewards = RewardService.user_rewards(request.user)
@@ -92,21 +95,93 @@ def account(request):
         completed_count
     )
     
+    user_stories = Post.objects.filter(author=request.user).annotate(
+        num_likes=Count('likes')
+    ).order_by('-created_at')
+    
     stats = calculate_user_stats(request.user)
     
     earned_reward_ids = [ur.recompensa_id for ur in user_rewards]
     
     context = {
         'user': request.user,
+        'profile': profile,
         'active_challenges': active_challenges,
+        'completed_challenges': completed_challenges,
         'completed_count': completed_count,
         'user_rewards': user_rewards,
         'all_rewards': all_rewards,
         'earned_reward_ids': earned_reward_ids,
         'next_reward_progress': next_reward_progress,
         'stats': stats,
+        'user_stories': user_stories,
     }
-    return render(request, 'pulmora/account.html')
+    return render(request, 'pulmora/account.html', context)
+
+@login_required
+@require_http_methods(["POST"])
+def update_profile(request):
+    try:
+        data = json.loads(request.body)
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
+        
+        # Actualizar username si se proporcionó
+        if 'username' in data and data['username']:
+            new_username = data['username'].strip()
+            # Verificar que el username no esté en uso por otro usuario
+            if User.objects.filter(username=new_username).exclude(id=request.user.id).exists():
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Este nombre de usuario ya está en uso'
+                }, status=400)
+            request.user.username = new_username
+        
+        # Actualizar email si se proporcionó
+        if 'email' in data and data['email']:
+            new_email = data['email'].strip()
+            # Verificar que el email no esté en uso por otro usuario
+            if User.objects.filter(email=new_email).exclude(id=request.user.id).exists():
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Este email ya está registrado'
+                }, status=400)
+            request.user.email = new_email
+        
+        # Guardar cambios en el usuario
+        request.user.save()
+        
+        # Actualizar campos del perfil
+        if 'avatar' in data:
+            profile.avatar = data['avatar']
+        if 'bio' in data:
+            profile.bio = data['bio']
+        if 'pais' in data:
+            profile.pais = data['pais']
+        if 'objetivo' in data:
+            profile.objetivo = data['objetivo']
+        
+        profile.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Perfil actualizado correctamente'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=400)
+
+@login_required
+def edit_account(request):
+    """Renderiza la página de edición de cuenta"""
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    context = {
+        'user': request.user,
+        'profile': profile,
+    }
+    return render(request, 'pulmora/edit_account.html', context)
 
 # Render the difference pages useful with a bredcrumb in all of there
 def community(request):

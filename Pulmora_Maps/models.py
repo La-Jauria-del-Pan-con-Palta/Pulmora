@@ -108,3 +108,17 @@ class UsuarioRecompensa(models.Model):
     class Meta:
         unique_together = ('usuario', 'recompensa')
         verbose_name_plural = "Recompensas de usuarios"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    avatar = models.TextField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True, max_length=500)
+    pais = models.CharField(max_length=2, blank=True, null=True)
+    objetivo = models.TextField(blank=True, null=True, max_length=200)
+    
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
+    
+    class Meta:
+        db_table = "perfiles_usuario"
+        verbose_name_plural = "Perfiles de Usuario"
