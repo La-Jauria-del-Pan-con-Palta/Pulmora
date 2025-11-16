@@ -53,6 +53,7 @@ class Retos(models.Model):
     fecha_fin = models.DateField(null=True, blank=True)
     icono = models.CharField(max_length=50, default="🌱")
     activo = models.BooleanField(default=True)
+    objetivo_sugerido = models.IntegerField(default=10)  # ← NUEVO CAMPO
 
     def __str__(self):
         return self.titulo

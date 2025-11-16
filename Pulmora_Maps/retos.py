@@ -1,6 +1,9 @@
 from django.shortcuts import get_object_or_404
 from .models import Retos, UsuarioReto, Recompensa, UsuarioRecompensa
 
+from django.shortcuts import get_object_or_404
+from .models import Retos, UsuarioReto, Recompensa, UsuarioRecompensa
+
 
 class ChallengeService:
     
@@ -87,6 +90,20 @@ class ChallengeService:
             usuario=user,
             reto_id=challenge_id
         ).exists()
+    
+    @staticmethod
+    def count_participants(challenge_id):
+        """Cuenta cuántos usuarios están participando en un reto"""
+        return UsuarioReto.objects.filter(reto_id=challenge_id).count()
+    
+    @staticmethod
+    def get_user_progress(user, challenge_id):
+        """Obtiene el progreso de un usuario en un reto específico"""
+        try:
+            return UsuarioReto.objects.get(usuario=user, reto_id=challenge_id)
+        except UsuarioReto.DoesNotExist:
+            return None
+
 
 class RewardService:
     
@@ -142,6 +159,7 @@ class RewardService:
     def count_user_rewards(user):
         return UsuarioRecompensa.objects.filter(usuario=user).count()
 
+
 def calculate_user_stats(user):
     completed_challenges = UsuarioReto.objects.filter(
         usuario=user,
@@ -155,6 +173,7 @@ def calculate_user_stats(user):
             completado=False
         ).count(),
     }
+
 
 def format_date_spanish(date):
     months = {

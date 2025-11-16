@@ -123,25 +123,36 @@ def community(request):
     popular_stories = Post.objects.annotate(num_likes=Count('likes')).order_by('-num_likes', '-created_at')
     
     challenges = ChallengeService.get_active()
+    
+    challenges_with_info = []
+    for challenge in challenges:
+        challenge_info = {
+            'challenge': challenge,
+            'participants_count': ChallengeService.count_participants(challenge.id),
+            'user_progress': None,
+            'is_joined': False
+        }
+        
+        if request.user.is_authenticated:
+            user_progress = ChallengeService.get_user_progress(request.user, challenge.id)
+            if user_progress:
+                challenge_info['user_progress'] = user_progress
+                challenge_info['is_joined'] = True
+        
+        challenges_with_info.append(challenge_info)
+    
     VISIBLE_STORIES_LIMIT = 3
-
     show_carousel = popular_stories.count() > VISIBLE_STORIES_LIMIT
+    
     context = {
         'breadcrumb': [
-            {
-                'name': 'inicio', 
-                'url': 'index'
-             },
-            {
-                'name': 'comunidad',
-                'url': None
-            }
+            {'name': 'inicio', 'url': 'index'},
+            {'name': 'comunidad', 'url': None}
         ],
-
         'success_stories': success_stories,
         'popular_stories': popular_stories,
         'show_carousel': show_carousel,
-        'challenges': challenges
+        'challenges_with_info': challenges_with_info
     }
     return render(request, 'pulmora/community.html', context)
 
@@ -260,8 +271,7 @@ def challenge_list(request):
         'rewards': RewardService.user_rewards(request.user),
     }
     
-    return render(request, 'retos/lista_retos.html', context)
-
+    return render(request, 'retos/community.html', context)
 
 @login_required
 def join_challenge(request, challenge_id):
@@ -279,8 +289,7 @@ def join_challenge(request, challenge_id):
         else:
             messages.info(request, 'Ya estás participando en este reto')
     
-    return redirect('challenge_list')
-
+    return redirect('community')
 
 @login_required
 def update_challenge_progress(request, user_challenge_id):
@@ -310,7 +319,6 @@ def update_challenge_progress(request, user_challenge_id):
             ]
     
     return JsonResponse(result)
-
 
 @login_required
 def abandon_challenge(request, user_challenge_id):
