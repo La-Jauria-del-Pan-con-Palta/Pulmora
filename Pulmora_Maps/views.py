@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.db.models import Count
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm 
-from .models import Post, Comment, UserProfile
+from .models import Post, Comment, UserProfile, User
 from .retos import ChallengeService, RewardService, calculate_user_stats
 from . import apis, history
 import json
